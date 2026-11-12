@@ -1,0 +1,26 @@
+name: TEST DERIV CONNECTION
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Télécharger le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer dépendance
+        run: pip install websocket-client
+
+      - name: Tester Deriv
+        run: python test_deriv.py
