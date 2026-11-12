@@ -2,59 +2,37 @@ import json
 import time
 import websocket
 
-ENDPOINTS = [
-    (
-        "NOUVELLE API",
-        "wss://api.derivws.com/trading/v1/options/ws/public"
-    ),
-    (
-        "ANCIENNE API",
-        "wss://ws.derivws.com/websockets/v3?app_id=1089"
+URL = "wss://api.derivws.com/trading/v1/options/ws/public"
+
+print("Connexion à Deriv...")
+
+try:
+    ws = websocket.create_connection(
+        URL,
+        timeout=30
     )
-]
 
-def test_connection(name, url):
-    print(f"\n--- TEST {name} ---")
-    ws = None
+    print("Connexion réussie.")
 
-    try:
-        ws = websocket.create_connection(
-            url,
-            timeout=20,
-            enable_multithread=True
-        )
+    ws.send(json.dumps({
+        "ticks": "BOOM1000",
+        "subscribe": 1,
+        "req_id": 2001
+    }))
 
-        print("CONNEXION : OK")
+    print("Abonnement envoyé.")
 
-        request = {
-            "ticks_history": "BOOM1000",
-            "count": 5,
-            "end": "latest",
-            "style": "ticks",
-            "req_id": 1
-        }
+    for i in range(10):
+        try:
+            message = ws.recv()
+            data = json.loads(message)
 
-        ws.send(json.dumps(request))
-        response = json.loads(ws.recv())
+            print("MESSAGE", i + 1, ":", data)
 
-        print("REPONSE DERIV :")
-        print(json.dumps(response, indent=2))
+        except websocket.WebSocketTimeoutException:
+            print("Timeout :", i + 1)
 
-        if "error" in response:
-            print("RESULTAT : CONNECTE, MAIS ERREUR API")
-        else:
-            print("RESULTAT : SUCCES")
+    ws.close()
 
-    except Exception as e:
-        print("RESULTAT : ECHEC")
-        print(type(e).__name__, str(e))
-
-    finally:
-        if ws:
-            ws.close()
-
-for name, url in ENDPOINTS:
-    test_connection(name, url)
-    time.sleep(3)
-
-print("\nTESTS TERMINES")
+except Exception as e:
+    print("ERREUR :", repr(e))
