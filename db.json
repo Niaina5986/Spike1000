@@ -1,0 +1,5682 @@
+{
+  "version": 4,
+  "symbol": "BOOM1000",
+  "created_at": "2026-11-12T06:38:26.971386+00:00",
+  "updated_at": "2026-11-12T06:40:27.696694+00:00",
+  "ticks": [
+    {
+      "epoch": 1794464507,
+      "price": 14504.852,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464508,
+      "price": 14504.847,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464509,
+      "price": 14504.833,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464510,
+      "price": 14504.833,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464511,
+      "price": 14504.786,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464512,
+      "price": 14504.77,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464513,
+      "price": 14504.751,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464514,
+      "price": 14504.75,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464515,
+      "price": 14504.74,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464516,
+      "price": 14504.711,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464517,
+      "price": 14504.692,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464518,
+      "price": 14504.66,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464519,
+      "price": 14504.626,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464520,
+      "price": 14504.612,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464521,
+      "price": 14504.582,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464522,
+      "price": 14504.572,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464523,
+      "price": 14504.56,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464524,
+      "price": 14504.559,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464525,
+      "price": 14504.549,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464526,
+      "price": 14504.539,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464527,
+      "price": 14504.503,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464528,
+      "price": 14504.489,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464529,
+      "price": 14504.476,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464530,
+      "price": 14504.464,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464531,
+      "price": 14504.458,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464532,
+      "price": 14504.442,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464533,
+      "price": 14504.436,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464534,
+      "price": 14504.435,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464535,
+      "price": 14504.409,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464536,
+      "price": 14504.391,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464537,
+      "price": 14504.387,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464538,
+      "price": 14504.375,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464539,
+      "price": 14504.373,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464540,
+      "price": 14504.36,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464541,
+      "price": 14504.356,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464542,
+      "price": 14504.352,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464543,
+      "price": 14504.347,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464544,
+      "price": 14504.31,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464545,
+      "price": 14504.284,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464546,
+      "price": 14504.264,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464547,
+      "price": 14504.248,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464548,
+      "price": 14504.237,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464549,
+      "price": 14504.22,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464550,
+      "price": 14504.219,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464551,
+      "price": 14504.187,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464552,
+      "price": 14504.181,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464553,
+      "price": 14504.164,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464554,
+      "price": 14504.156,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464555,
+      "price": 14504.131,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464556,
+      "price": 14504.122,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464557,
+      "price": 14504.109,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464558,
+      "price": 14504.1,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464559,
+      "price": 14504.088,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464560,
+      "price": 14504.08,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464561,
+      "price": 14504.079,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464562,
+      "price": 14504.072,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464563,
+      "price": 14504.068,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464564,
+      "price": 14504.046,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464565,
+      "price": 14504.024,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464566,
+      "price": 14503.983,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464567,
+      "price": 14503.959,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464568,
+      "price": 14503.949,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464569,
+      "price": 14503.935,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464570,
+      "price": 14503.923,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464571,
+      "price": 14503.921,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464572,
+      "price": 14503.903,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464573,
+      "price": 14503.889,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464574,
+      "price": 14503.863,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464575,
+      "price": 14503.838,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464576,
+      "price": 14503.819,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464577,
+      "price": 14503.799,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464578,
+      "price": 14503.776,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464579,
+      "price": 14503.77,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464580,
+      "price": 14503.767,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464581,
+      "price": 14503.759,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464582,
+      "price": 14503.747,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464583,
+      "price": 14503.726,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464584,
+      "price": 14503.7,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464585,
+      "price": 14503.694,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464586,
+      "price": 14503.685,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464587,
+      "price": 14503.654,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464588,
+      "price": 14503.636,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464589,
+      "price": 14503.624,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464590,
+      "price": 14503.601,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464591,
+      "price": 14503.599,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464592,
+      "price": 14503.59,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464593,
+      "price": 14503.579,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464594,
+      "price": 14503.563,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464595,
+      "price": 14503.553,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464596,
+      "price": 14503.54,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464597,
+      "price": 14503.534,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464598,
+      "price": 14503.53,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464599,
+      "price": 14503.503,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464600,
+      "price": 14503.489,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464601,
+      "price": 14503.438,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464602,
+      "price": 14503.436,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464603,
+      "price": 14503.406,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464604,
+      "price": 14503.404,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464605,
+      "price": 14503.386,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464606,
+      "price": 14503.381,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464607,
+      "price": 14503.366,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464608,
+      "price": 14503.358,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464609,
+      "price": 14503.319,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464610,
+      "price": 14503.297,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464611,
+      "price": 14503.282,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464612,
+      "price": 14503.266,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464613,
+      "price": 14503.23,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464614,
+      "price": 14503.208,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464615,
+      "price": 14503.208,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464616,
+      "price": 14503.173,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464617,
+      "price": 14503.151,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464618,
+      "price": 14503.133,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464619,
+      "price": 14503.129,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464620,
+      "price": 14503.123,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464621,
+      "price": 14503.094,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464622,
+      "price": 14503.088,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464623,
+      "price": 14503.07,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464624,
+      "price": 14503.053,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464625,
+      "price": 14503.031,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464626,
+      "price": 14503.027,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464627,
+      "price": 14503.004,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464628,
+      "price": 14502.967,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464629,
+      "price": 14502.965,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464630,
+      "price": 14502.942,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464631,
+      "price": 14502.923,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464632,
+      "price": 14502.914,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464633,
+      "price": 14502.911,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464634,
+      "price": 14502.888,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464635,
+      "price": 14502.869,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464636,
+      "price": 14502.863,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464637,
+      "price": 14502.846,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464638,
+      "price": 14502.84,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464639,
+      "price": 14502.831,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464640,
+      "price": 14502.816,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464641,
+      "price": 14502.803,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464642,
+      "price": 14502.783,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464643,
+      "price": 14502.774,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464644,
+      "price": 14502.773,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464645,
+      "price": 14502.751,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464646,
+      "price": 14502.75,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464647,
+      "price": 14502.738,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464648,
+      "price": 14502.715,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464649,
+      "price": 14502.703,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464650,
+      "price": 14502.698,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464651,
+      "price": 14502.69,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464652,
+      "price": 14502.677,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464653,
+      "price": 14502.673,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464654,
+      "price": 14502.643,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464655,
+      "price": 14502.637,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464656,
+      "price": 14502.628,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464657,
+      "price": 14502.625,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464658,
+      "price": 14502.598,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464659,
+      "price": 14502.577,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464660,
+      "price": 14502.547,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464661,
+      "price": 14502.546,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464662,
+      "price": 14502.539,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464663,
+      "price": 14502.515,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464664,
+      "price": 14502.493,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464665,
+      "price": 14502.463,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464666,
+      "price": 14502.46,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464667,
+      "price": 14502.444,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464668,
+      "price": 14502.397,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464669,
+      "price": 14502.381,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464670,
+      "price": 14502.372,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464671,
+      "price": 14502.357,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464672,
+      "price": 14502.353,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464673,
+      "price": 14502.325,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464674,
+      "price": 14502.303,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464675,
+      "price": 14502.289,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464676,
+      "price": 14502.28,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464677,
+      "price": 14502.27,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464678,
+      "price": 14502.258,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464679,
+      "price": 14502.246,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464680,
+      "price": 14502.242,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464681,
+      "price": 14502.236,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464682,
+      "price": 14502.223,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464683,
+      "price": 14502.204,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464684,
+      "price": 14502.177,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464685,
+      "price": 14502.155,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464686,
+      "price": 14502.125,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464687,
+      "price": 14502.123,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464688,
+      "price": 14502.123,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464689,
+      "price": 14502.111,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464690,
+      "price": 14502.102,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464691,
+      "price": 14502.087,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464692,
+      "price": 14502.071,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464693,
+      "price": 14502.069,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464694,
+      "price": 14502.044,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464695,
+      "price": 14502.034,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464696,
+      "price": 14502.013,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464697,
+      "price": 14501.993,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464698,
+      "price": 14501.978,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464699,
+      "price": 14501.961,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464700,
+      "price": 14501.956,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464701,
+      "price": 14501.94,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464702,
+      "price": 14501.933,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464703,
+      "price": 14501.929,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464704,
+      "price": 14501.916,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464705,
+      "price": 14501.912,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464706,
+      "price": 14501.884,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464707,
+      "price": 14501.871,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464708,
+      "price": 14501.853,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464709,
+      "price": 14501.844,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464710,
+      "price": 14501.832,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464711,
+      "price": 14501.831,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464712,
+      "price": 14501.816,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464713,
+      "price": 14501.813,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464714,
+      "price": 14501.79,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464715,
+      "price": 14501.774,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464716,
+      "price": 14501.752,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464717,
+      "price": 14501.738,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464718,
+      "price": 14501.697,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464719,
+      "price": 14501.675,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464720,
+      "price": 14501.656,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464721,
+      "price": 14501.643,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464722,
+      "price": 14501.638,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464723,
+      "price": 14501.635,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464724,
+      "price": 14501.602,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464725,
+      "price": 14501.599,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464726,
+      "price": 14501.583,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464727,
+      "price": 14501.583,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464728,
+      "price": 14501.564,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464729,
+      "price": 14501.563,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464730,
+      "price": 14501.545,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464731,
+      "price": 14501.52,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464732,
+      "price": 14501.519,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464733,
+      "price": 14501.514,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464734,
+      "price": 14501.504,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464735,
+      "price": 14501.491,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464736,
+      "price": 14501.449,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464737,
+      "price": 14501.414,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464738,
+      "price": 14501.39,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464739,
+      "price": 14501.376,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464740,
+      "price": 14501.348,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464741,
+      "price": 14501.328,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464742,
+      "price": 14501.324,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464743,
+      "price": 14501.321,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464744,
+      "price": 14501.297,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464745,
+      "price": 14501.282,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464746,
+      "price": 14501.239,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464747,
+      "price": 14501.221,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464748,
+      "price": 14501.202,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464749,
+      "price": 14501.202,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464750,
+      "price": 14501.181,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464751,
+      "price": 14501.166,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464752,
+      "price": 14501.161,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464753,
+      "price": 14501.152,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464754,
+      "price": 14501.129,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464755,
+      "price": 14501.114,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464756,
+      "price": 14501.085,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464757,
+      "price": 14501.082,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464758,
+      "price": 14501.065,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464759,
+      "price": 14501.044,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464760,
+      "price": 14501.031,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464761,
+      "price": 14501.016,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464762,
+      "price": 14500.996,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464763,
+      "price": 14500.972,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464764,
+      "price": 14500.941,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464765,
+      "price": 14500.94,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464766,
+      "price": 14500.922,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464767,
+      "price": 14500.91,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464768,
+      "price": 14500.91,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464769,
+      "price": 14500.907,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464770,
+      "price": 14500.902,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464771,
+      "price": 14500.895,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464772,
+      "price": 14500.892,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464773,
+      "price": 14500.87,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464774,
+      "price": 14500.866,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464775,
+      "price": 14500.864,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464776,
+      "price": 14500.862,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464777,
+      "price": 14500.844,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464778,
+      "price": 14500.822,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464779,
+      "price": 14500.803,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464780,
+      "price": 14500.775,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464781,
+      "price": 14500.76,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464782,
+      "price": 14500.756,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464783,
+      "price": 14500.723,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464784,
+      "price": 14500.718,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464785,
+      "price": 14500.682,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464786,
+      "price": 14500.675,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464787,
+      "price": 14500.656,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464788,
+      "price": 14500.656,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464789,
+      "price": 14500.652,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464790,
+      "price": 14500.636,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464791,
+      "price": 14500.619,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464792,
+      "price": 14500.614,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464793,
+      "price": 14500.592,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464794,
+      "price": 14500.587,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464795,
+      "price": 14500.565,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464796,
+      "price": 14500.544,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464797,
+      "price": 14500.521,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464798,
+      "price": 14500.503,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464799,
+      "price": 14500.49,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464800,
+      "price": 14500.477,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464801,
+      "price": 14500.462,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464802,
+      "price": 14500.453,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464803,
+      "price": 14500.449,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464804,
+      "price": 14500.443,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464805,
+      "price": 14500.439,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464806,
+      "price": 14500.431,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464807,
+      "price": 14500.409,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464808,
+      "price": 14500.372,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464809,
+      "price": 14500.343,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464810,
+      "price": 14500.313,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464811,
+      "price": 14500.311,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464812,
+      "price": 14500.303,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464813,
+      "price": 14500.276,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464814,
+      "price": 14500.271,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464815,
+      "price": 14500.259,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464816,
+      "price": 14500.25,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464817,
+      "price": 14500.239,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464818,
+      "price": 14500.232,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464819,
+      "price": 14500.21,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464820,
+      "price": 14500.187,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464821,
+      "price": 14500.182,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464822,
+      "price": 14500.164,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464823,
+      "price": 14500.15,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464824,
+      "price": 14500.14,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464825,
+      "price": 14500.127,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464826,
+      "price": 14500.103,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464827,
+      "price": 14500.091,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464828,
+      "price": 14500.088,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464829,
+      "price": 14500.057,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464830,
+      "price": 14500.046,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464831,
+      "price": 14500.022,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464832,
+      "price": 14500.01,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464833,
+      "price": 14499.993,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464834,
+      "price": 14499.984,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464835,
+      "price": 14499.962,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464836,
+      "price": 14499.96,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464837,
+      "price": 14499.954,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464838,
+      "price": 14499.945,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464839,
+      "price": 14499.93,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464840,
+      "price": 14499.912,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464841,
+      "price": 14499.902,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464842,
+      "price": 14499.9,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464843,
+      "price": 14499.895,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464844,
+      "price": 14499.893,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464845,
+      "price": 14499.871,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464846,
+      "price": 14499.851,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464847,
+      "price": 14499.848,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464848,
+      "price": 14499.842,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464849,
+      "price": 14499.841,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464850,
+      "price": 14499.836,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464851,
+      "price": 14499.831,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464852,
+      "price": 14499.83,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464853,
+      "price": 14499.812,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464854,
+      "price": 14499.785,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464855,
+      "price": 14499.783,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464856,
+      "price": 14499.761,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464857,
+      "price": 14499.758,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464858,
+      "price": 14499.745,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464859,
+      "price": 14499.735,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464860,
+      "price": 14499.711,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464861,
+      "price": 14499.697,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464862,
+      "price": 14499.674,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464863,
+      "price": 14499.656,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464864,
+      "price": 14499.642,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464865,
+      "price": 14499.62,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464866,
+      "price": 14499.617,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464867,
+      "price": 14499.598,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464868,
+      "price": 14499.587,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464869,
+      "price": 14499.576,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464870,
+      "price": 14499.574,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464871,
+      "price": 14499.55,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464872,
+      "price": 14499.549,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464873,
+      "price": 14499.534,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464874,
+      "price": 14499.527,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464875,
+      "price": 14499.513,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464876,
+      "price": 14499.494,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464877,
+      "price": 14499.48,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464878,
+      "price": 14499.478,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464879,
+      "price": 14499.462,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464880,
+      "price": 14499.461,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464881,
+      "price": 14499.45,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464882,
+      "price": 14499.439,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464883,
+      "price": 14499.435,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464884,
+      "price": 14499.408,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464885,
+      "price": 14499.398,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464886,
+      "price": 14499.388,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464887,
+      "price": 14499.386,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464888,
+      "price": 14499.355,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464889,
+      "price": 14499.34,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464890,
+      "price": 14499.305,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464891,
+      "price": 14499.288,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464892,
+      "price": 14499.257,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464893,
+      "price": 14499.235,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464894,
+      "price": 14499.225,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464895,
+      "price": 14499.183,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464896,
+      "price": 14499.177,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464897,
+      "price": 14499.166,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464898,
+      "price": 14499.162,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464899,
+      "price": 14499.135,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464900,
+      "price": 14499.106,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464901,
+      "price": 14499.1,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464902,
+      "price": 14499.081,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464903,
+      "price": 14499.074,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464904,
+      "price": 14499.066,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464905,
+      "price": 14499.046,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464906,
+      "price": 14499.024,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464907,
+      "price": 14498.993,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464908,
+      "price": 14498.979,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464909,
+      "price": 14498.97,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464910,
+      "price": 14498.965,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464911,
+      "price": 14498.962,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464912,
+      "price": 14498.944,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464913,
+      "price": 14498.906,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464914,
+      "price": 14498.896,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464915,
+      "price": 14498.873,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464916,
+      "price": 14498.851,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464917,
+      "price": 14498.829,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464918,
+      "price": 14498.81,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464919,
+      "price": 14498.792,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464920,
+      "price": 14498.788,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464921,
+      "price": 14498.774,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464922,
+      "price": 14498.772,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464923,
+      "price": 14498.744,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464924,
+      "price": 14498.725,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464925,
+      "price": 14498.705,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464926,
+      "price": 14498.69,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464927,
+      "price": 14498.67,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464928,
+      "price": 14498.651,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464929,
+      "price": 14498.638,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464930,
+      "price": 14498.626,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464931,
+      "price": 14498.612,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464932,
+      "price": 14498.597,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464933,
+      "price": 14498.579,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464934,
+      "price": 14498.571,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464935,
+      "price": 14498.566,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464936,
+      "price": 14498.535,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464937,
+      "price": 14498.534,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464938,
+      "price": 14498.524,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464939,
+      "price": 14498.523,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464940,
+      "price": 14498.519,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464941,
+      "price": 14498.504,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464942,
+      "price": 14498.486,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464943,
+      "price": 14498.472,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464944,
+      "price": 14498.444,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464945,
+      "price": 14498.433,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464946,
+      "price": 14498.425,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464947,
+      "price": 14498.414,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464948,
+      "price": 14498.391,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464949,
+      "price": 14498.358,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464950,
+      "price": 14498.319,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464951,
+      "price": 14498.279,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464952,
+      "price": 14498.265,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464953,
+      "price": 14498.253,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464954,
+      "price": 14498.232,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464955,
+      "price": 14498.222,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464956,
+      "price": 14498.221,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464957,
+      "price": 14498.214,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464958,
+      "price": 14498.205,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464959,
+      "price": 14498.197,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464960,
+      "price": 14498.181,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464961,
+      "price": 14498.173,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464962,
+      "price": 14498.153,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464963,
+      "price": 14498.136,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464964,
+      "price": 14498.117,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464965,
+      "price": 14498.108,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464966,
+      "price": 14498.1,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464967,
+      "price": 14498.096,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464968,
+      "price": 14498.071,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464969,
+      "price": 14498.054,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464970,
+      "price": 14498.036,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464971,
+      "price": 14498.032,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464972,
+      "price": 14498.028,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464973,
+      "price": 14498.024,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464974,
+      "price": 14498.01,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464975,
+      "price": 14498.008,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464976,
+      "price": 14497.987,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464977,
+      "price": 14497.959,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464978,
+      "price": 14497.951,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464979,
+      "price": 14497.94,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464980,
+      "price": 14497.914,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464981,
+      "price": 14497.902,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464982,
+      "price": 14497.884,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464983,
+      "price": 14497.878,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464984,
+      "price": 14497.873,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464985,
+      "price": 14497.861,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464986,
+      "price": 14497.835,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464987,
+      "price": 14497.82,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464988,
+      "price": 14497.803,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464989,
+      "price": 14497.802,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464990,
+      "price": 14497.78,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464991,
+      "price": 14497.771,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464992,
+      "price": 14497.751,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464993,
+      "price": 14497.737,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464994,
+      "price": 14497.729,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464995,
+      "price": 14497.719,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464996,
+      "price": 14497.708,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464997,
+      "price": 14497.696,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464998,
+      "price": 14497.691,
+      "source": "history"
+    },
+    {
+      "epoch": 1794464999,
+      "price": 14497.683,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465000,
+      "price": 14497.68,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465001,
+      "price": 14497.665,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465002,
+      "price": 14497.65,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465003,
+      "price": 14497.645,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465004,
+      "price": 14497.625,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465005,
+      "price": 14497.619,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465006,
+      "price": 14497.6,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465007,
+      "price": 14497.585,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465008,
+      "price": 14497.569,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465009,
+      "price": 14497.547,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465010,
+      "price": 14497.547,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465011,
+      "price": 14497.529,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465012,
+      "price": 14497.514,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465013,
+      "price": 14497.497,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465014,
+      "price": 14497.492,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465015,
+      "price": 14497.47,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465016,
+      "price": 14497.469,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465017,
+      "price": 14497.456,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465018,
+      "price": 14497.438,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465019,
+      "price": 14497.419,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465020,
+      "price": 14497.409,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465021,
+      "price": 14497.409,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465022,
+      "price": 14497.398,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465023,
+      "price": 14497.368,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465024,
+      "price": 14497.364,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465025,
+      "price": 14497.347,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465026,
+      "price": 14497.335,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465027,
+      "price": 14497.292,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465028,
+      "price": 14497.284,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465029,
+      "price": 14497.282,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465030,
+      "price": 14497.278,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465031,
+      "price": 14497.25,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465032,
+      "price": 14497.225,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465033,
+      "price": 14497.225,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465034,
+      "price": 14497.195,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465035,
+      "price": 14497.184,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465036,
+      "price": 14497.181,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465037,
+      "price": 14497.172,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465038,
+      "price": 14497.164,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465039,
+      "price": 14497.162,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465040,
+      "price": 14497.148,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465041,
+      "price": 14497.145,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465042,
+      "price": 14497.113,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465043,
+      "price": 14497.084,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465044,
+      "price": 14497.077,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465045,
+      "price": 14497.059,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465046,
+      "price": 14497.04,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465047,
+      "price": 14497.031,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465048,
+      "price": 14497.022,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465049,
+      "price": 14497.012,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465050,
+      "price": 14496.998,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465051,
+      "price": 14496.98,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465052,
+      "price": 14496.964,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465053,
+      "price": 14496.956,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465054,
+      "price": 14496.942,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465055,
+      "price": 14496.924,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465056,
+      "price": 14496.905,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465057,
+      "price": 14496.892,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465058,
+      "price": 14496.872,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465059,
+      "price": 14496.854,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465060,
+      "price": 14496.849,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465061,
+      "price": 14496.846,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465062,
+      "price": 14496.841,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465063,
+      "price": 14496.815,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465064,
+      "price": 14496.804,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465065,
+      "price": 14496.782,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465066,
+      "price": 14496.767,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465067,
+      "price": 14496.757,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465068,
+      "price": 14496.743,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465069,
+      "price": 14496.735,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465070,
+      "price": 14496.711,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465071,
+      "price": 14496.691,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465072,
+      "price": 14496.674,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465073,
+      "price": 14496.659,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465074,
+      "price": 14496.638,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465075,
+      "price": 14496.627,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465076,
+      "price": 14496.623,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465077,
+      "price": 14496.622,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465078,
+      "price": 14496.601,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465079,
+      "price": 14496.596,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465080,
+      "price": 14496.589,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465081,
+      "price": 14496.573,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465082,
+      "price": 14496.563,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465083,
+      "price": 14496.55,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465084,
+      "price": 14496.549,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465085,
+      "price": 14496.516,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465086,
+      "price": 14496.509,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465087,
+      "price": 14496.505,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465088,
+      "price": 14496.498,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465089,
+      "price": 14496.487,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465090,
+      "price": 14496.482,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465091,
+      "price": 14496.468,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465092,
+      "price": 14496.454,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465093,
+      "price": 14496.427,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465094,
+      "price": 14496.421,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465095,
+      "price": 14496.412,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465096,
+      "price": 14496.411,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465097,
+      "price": 14496.395,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465098,
+      "price": 14496.383,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465099,
+      "price": 14496.377,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465100,
+      "price": 14496.353,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465101,
+      "price": 14496.317,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465102,
+      "price": 14496.283,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465103,
+      "price": 14496.27,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465104,
+      "price": 14496.255,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465105,
+      "price": 14496.252,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465106,
+      "price": 14496.219,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465107,
+      "price": 14496.204,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465108,
+      "price": 14496.176,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465109,
+      "price": 14496.174,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465110,
+      "price": 14496.173,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465111,
+      "price": 14496.156,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465112,
+      "price": 14496.144,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465113,
+      "price": 14496.137,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465114,
+      "price": 14496.126,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465115,
+      "price": 14496.126,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465116,
+      "price": 14496.109,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465117,
+      "price": 14496.1,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465118,
+      "price": 14496.09,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465119,
+      "price": 14496.088,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465120,
+      "price": 14501.323,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465121,
+      "price": 14501.303,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465122,
+      "price": 14501.294,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465123,
+      "price": 14501.262,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465124,
+      "price": 14501.243,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465125,
+      "price": 14501.217,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465126,
+      "price": 14501.198,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465127,
+      "price": 14501.187,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465128,
+      "price": 14501.185,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465129,
+      "price": 14501.166,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465130,
+      "price": 14501.136,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465131,
+      "price": 14501.114,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465132,
+      "price": 14501.112,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465133,
+      "price": 14501.112,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465134,
+      "price": 14501.088,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465135,
+      "price": 14501.078,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465136,
+      "price": 14501.077,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465137,
+      "price": 14501.064,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465138,
+      "price": 14501.043,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465139,
+      "price": 14501.038,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465140,
+      "price": 14501.037,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465141,
+      "price": 14501.024,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465142,
+      "price": 14501.009,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465143,
+      "price": 14500.985,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465144,
+      "price": 14500.976,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465145,
+      "price": 14500.972,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465146,
+      "price": 14500.946,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465147,
+      "price": 14500.916,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465148,
+      "price": 14500.909,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465149,
+      "price": 14500.889,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465150,
+      "price": 14500.886,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465151,
+      "price": 14500.878,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465152,
+      "price": 14500.872,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465153,
+      "price": 14500.87,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465154,
+      "price": 14500.843,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465155,
+      "price": 14500.842,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465156,
+      "price": 14500.809,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465157,
+      "price": 14500.789,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465158,
+      "price": 14500.781,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465159,
+      "price": 14500.756,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465160,
+      "price": 14500.744,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465161,
+      "price": 14500.739,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465162,
+      "price": 14500.737,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465163,
+      "price": 14500.722,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465164,
+      "price": 14500.701,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465165,
+      "price": 14500.67,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465166,
+      "price": 14500.66,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465167,
+      "price": 14500.635,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465168,
+      "price": 14500.613,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465169,
+      "price": 14500.607,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465170,
+      "price": 14500.567,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465171,
+      "price": 14500.566,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465172,
+      "price": 14500.551,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465173,
+      "price": 14500.534,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465174,
+      "price": 14500.509,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465175,
+      "price": 14500.486,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465176,
+      "price": 14500.486,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465177,
+      "price": 14500.464,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465178,
+      "price": 14500.419,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465179,
+      "price": 14500.385,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465180,
+      "price": 14500.37,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465181,
+      "price": 14500.368,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465182,
+      "price": 14500.351,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465183,
+      "price": 14500.34,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465184,
+      "price": 14500.315,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465185,
+      "price": 14500.305,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465186,
+      "price": 14500.302,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465187,
+      "price": 14500.293,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465188,
+      "price": 14500.287,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465189,
+      "price": 14500.279,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465190,
+      "price": 14500.278,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465191,
+      "price": 14500.267,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465192,
+      "price": 14500.236,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465193,
+      "price": 14500.214,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465194,
+      "price": 14500.181,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465195,
+      "price": 14500.141,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465196,
+      "price": 14500.131,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465197,
+      "price": 14500.13,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465198,
+      "price": 14500.127,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465199,
+      "price": 14500.117,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465200,
+      "price": 14500.099,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465201,
+      "price": 14500.099,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465202,
+      "price": 14500.083,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465203,
+      "price": 14500.074,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465204,
+      "price": 14500.046,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465205,
+      "price": 14500.027,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465206,
+      "price": 14500.023,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465207,
+      "price": 14500.014,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465208,
+      "price": 14500.008,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465209,
+      "price": 14499.999,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465210,
+      "price": 14499.996,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465211,
+      "price": 14499.987,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465212,
+      "price": 14499.971,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465213,
+      "price": 14499.971,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465214,
+      "price": 14499.927,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465215,
+      "price": 14499.914,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465216,
+      "price": 14499.906,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465217,
+      "price": 14499.887,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465218,
+      "price": 14499.847,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465219,
+      "price": 14499.826,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465220,
+      "price": 14499.792,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465221,
+      "price": 14499.778,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465222,
+      "price": 14499.753,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465223,
+      "price": 14499.747,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465224,
+      "price": 14499.722,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465225,
+      "price": 14499.7,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465226,
+      "price": 14499.68,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465227,
+      "price": 14499.664,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465228,
+      "price": 14499.643,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465229,
+      "price": 14499.641,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465230,
+      "price": 14499.622,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465231,
+      "price": 14499.61,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465232,
+      "price": 14499.584,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465233,
+      "price": 14499.577,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465234,
+      "price": 14499.568,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465235,
+      "price": 14499.535,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465236,
+      "price": 14499.529,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465237,
+      "price": 14499.505,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465238,
+      "price": 14499.493,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465239,
+      "price": 14499.462,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465240,
+      "price": 14499.452,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465241,
+      "price": 14499.45,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465242,
+      "price": 14499.423,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465243,
+      "price": 14499.395,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465244,
+      "price": 14499.385,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465245,
+      "price": 14499.376,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465246,
+      "price": 14499.335,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465247,
+      "price": 14499.329,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465248,
+      "price": 14499.291,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465249,
+      "price": 14499.262,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465250,
+      "price": 14499.256,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465251,
+      "price": 14499.239,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465252,
+      "price": 14499.231,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465253,
+      "price": 14499.218,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465254,
+      "price": 14499.187,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465255,
+      "price": 14499.171,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465256,
+      "price": 14499.158,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465257,
+      "price": 14499.13,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465258,
+      "price": 14499.104,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465259,
+      "price": 14499.064,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465260,
+      "price": 14499.062,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465261,
+      "price": 14499.046,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465262,
+      "price": 14499.038,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465263,
+      "price": 14499.026,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465264,
+      "price": 14499.01,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465265,
+      "price": 14499.003,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465266,
+      "price": 14498.988,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465267,
+      "price": 14498.959,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465268,
+      "price": 14498.923,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465269,
+      "price": 14498.917,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465270,
+      "price": 14498.915,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465271,
+      "price": 14498.913,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465272,
+      "price": 14498.898,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465273,
+      "price": 14498.888,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465274,
+      "price": 14498.872,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465275,
+      "price": 14498.856,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465276,
+      "price": 14498.844,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465277,
+      "price": 14498.82,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465278,
+      "price": 14498.787,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465279,
+      "price": 14498.76,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465280,
+      "price": 14498.744,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465281,
+      "price": 14498.729,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465282,
+      "price": 14498.713,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465283,
+      "price": 14498.699,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465284,
+      "price": 14498.687,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465285,
+      "price": 14498.675,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465286,
+      "price": 14498.672,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465287,
+      "price": 14498.672,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465288,
+      "price": 14498.666,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465289,
+      "price": 14498.63,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465290,
+      "price": 14498.625,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465291,
+      "price": 14498.622,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465292,
+      "price": 14498.618,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465293,
+      "price": 14498.603,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465294,
+      "price": 14498.56,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465295,
+      "price": 14498.554,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465296,
+      "price": 14498.551,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465297,
+      "price": 14498.531,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465298,
+      "price": 14498.52,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465299,
+      "price": 14498.516,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465300,
+      "price": 14498.503,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465301,
+      "price": 14498.498,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465302,
+      "price": 14498.478,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465303,
+      "price": 14498.472,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465304,
+      "price": 14498.469,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465305,
+      "price": 14498.437,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465306,
+      "price": 14498.398,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465307,
+      "price": 14498.389,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465308,
+      "price": 14498.371,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465309,
+      "price": 14498.359,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465310,
+      "price": 14498.358,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465311,
+      "price": 14498.347,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465312,
+      "price": 14498.344,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465313,
+      "price": 14498.33,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465314,
+      "price": 14498.329,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465315,
+      "price": 14498.322,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465316,
+      "price": 14498.322,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465317,
+      "price": 14498.294,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465318,
+      "price": 14498.279,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465319,
+      "price": 14498.261,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465320,
+      "price": 14498.244,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465321,
+      "price": 14498.227,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465322,
+      "price": 14498.222,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465323,
+      "price": 14498.218,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465324,
+      "price": 14498.206,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465325,
+      "price": 14498.179,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465326,
+      "price": 14498.171,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465327,
+      "price": 14498.151,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465328,
+      "price": 14498.146,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465329,
+      "price": 14498.145,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465330,
+      "price": 14498.113,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465331,
+      "price": 14498.109,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465332,
+      "price": 14498.093,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465333,
+      "price": 14498.065,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465334,
+      "price": 14498.055,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465335,
+      "price": 14498.052,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465336,
+      "price": 14498.042,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465337,
+      "price": 14498.012,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465338,
+      "price": 14497.992,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465339,
+      "price": 14497.969,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465340,
+      "price": 14497.963,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465341,
+      "price": 14497.951,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465342,
+      "price": 14497.95,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465343,
+      "price": 14497.931,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465344,
+      "price": 14497.907,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465345,
+      "price": 14497.881,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465346,
+      "price": 14497.879,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465347,
+      "price": 14497.873,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465348,
+      "price": 14497.869,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465349,
+      "price": 14497.869,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465350,
+      "price": 14497.863,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465351,
+      "price": 14497.838,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465352,
+      "price": 14497.831,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465353,
+      "price": 14497.827,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465354,
+      "price": 14497.805,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465355,
+      "price": 14497.794,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465356,
+      "price": 14497.782,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465357,
+      "price": 14497.756,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465358,
+      "price": 14497.748,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465359,
+      "price": 14497.73,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465360,
+      "price": 14497.712,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465361,
+      "price": 14497.699,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465362,
+      "price": 14497.687,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465363,
+      "price": 14497.658,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465364,
+      "price": 14497.641,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465365,
+      "price": 14497.628,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465366,
+      "price": 14497.602,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465367,
+      "price": 14497.595,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465368,
+      "price": 14497.568,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465369,
+      "price": 14497.523,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465370,
+      "price": 14497.501,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465371,
+      "price": 14497.492,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465372,
+      "price": 14497.459,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465373,
+      "price": 14497.441,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465374,
+      "price": 14497.426,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465375,
+      "price": 14497.417,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465376,
+      "price": 14497.401,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465377,
+      "price": 14497.367,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465378,
+      "price": 14497.343,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465379,
+      "price": 14497.318,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465380,
+      "price": 14497.309,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465381,
+      "price": 14497.301,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465382,
+      "price": 14497.278,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465383,
+      "price": 14497.262,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465384,
+      "price": 14497.25,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465385,
+      "price": 14497.236,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465386,
+      "price": 14497.23,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465387,
+      "price": 14497.203,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465388,
+      "price": 14497.173,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465389,
+      "price": 14497.168,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465390,
+      "price": 14497.166,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465391,
+      "price": 14497.154,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465392,
+      "price": 14497.136,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465393,
+      "price": 14497.107,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465394,
+      "price": 14497.104,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465395,
+      "price": 14497.075,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465396,
+      "price": 14497.032,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465397,
+      "price": 14497.02,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465398,
+      "price": 14497.007,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465399,
+      "price": 14496.992,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465400,
+      "price": 14496.968,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465401,
+      "price": 14496.966,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465402,
+      "price": 14496.959,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465403,
+      "price": 14496.959,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465404,
+      "price": 14496.944,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465405,
+      "price": 14496.931,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465406,
+      "price": 14496.929,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465407,
+      "price": 14496.928,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465408,
+      "price": 14496.927,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465409,
+      "price": 14496.926,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465410,
+      "price": 14496.904,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465411,
+      "price": 14496.877,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465412,
+      "price": 14496.869,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465413,
+      "price": 14496.861,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465414,
+      "price": 14496.852,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465415,
+      "price": 14496.842,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465416,
+      "price": 14496.829,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465417,
+      "price": 14496.81,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465418,
+      "price": 14496.784,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465419,
+      "price": 14496.763,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465420,
+      "price": 14496.742,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465421,
+      "price": 14496.724,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465422,
+      "price": 14496.702,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465423,
+      "price": 14496.682,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465424,
+      "price": 14496.656,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465425,
+      "price": 14496.648,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465426,
+      "price": 14496.615,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465427,
+      "price": 14496.59,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465428,
+      "price": 14496.562,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465429,
+      "price": 14496.546,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465430,
+      "price": 14496.545,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465431,
+      "price": 14496.502,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465432,
+      "price": 14496.49,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465433,
+      "price": 14496.471,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465434,
+      "price": 14496.467,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465435,
+      "price": 14496.442,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465436,
+      "price": 14496.423,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465437,
+      "price": 14496.395,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465438,
+      "price": 14496.369,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465439,
+      "price": 14496.352,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465440,
+      "price": 14496.337,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465441,
+      "price": 14496.325,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465442,
+      "price": 14496.314,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465443,
+      "price": 14496.305,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465444,
+      "price": 14496.292,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465445,
+      "price": 14496.285,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465446,
+      "price": 14496.267,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465447,
+      "price": 14496.248,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465448,
+      "price": 14496.245,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465449,
+      "price": 14496.22,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465450,
+      "price": 14496.206,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465451,
+      "price": 14496.191,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465452,
+      "price": 14496.178,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465453,
+      "price": 14496.164,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465454,
+      "price": 14496.144,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465455,
+      "price": 14496.138,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465456,
+      "price": 14496.134,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465457,
+      "price": 14496.117,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465458,
+      "price": 14496.106,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465459,
+      "price": 14496.105,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465460,
+      "price": 14496.092,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465461,
+      "price": 14496.071,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465462,
+      "price": 14496.043,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465463,
+      "price": 14496.036,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465464,
+      "price": 14496.022,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465465,
+      "price": 14496.003,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465466,
+      "price": 14495.997,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465467,
+      "price": 14495.979,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465468,
+      "price": 14495.958,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465469,
+      "price": 14495.935,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465470,
+      "price": 14495.923,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465471,
+      "price": 14495.916,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465472,
+      "price": 14495.898,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465473,
+      "price": 14495.886,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465474,
+      "price": 14495.869,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465475,
+      "price": 14495.862,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465476,
+      "price": 14495.84,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465477,
+      "price": 14495.824,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465478,
+      "price": 14495.798,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465479,
+      "price": 14495.784,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465480,
+      "price": 14495.783,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465481,
+      "price": 14495.778,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465482,
+      "price": 14495.769,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465483,
+      "price": 14495.732,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465484,
+      "price": 14495.729,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465485,
+      "price": 14495.718,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465486,
+      "price": 14495.706,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465487,
+      "price": 14495.671,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465488,
+      "price": 14495.641,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465489,
+      "price": 14495.603,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465490,
+      "price": 14495.595,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465491,
+      "price": 14495.579,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465492,
+      "price": 14495.571,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465493,
+      "price": 14495.56,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465494,
+      "price": 14495.552,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465495,
+      "price": 14495.524,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465496,
+      "price": 14495.519,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465497,
+      "price": 14495.506,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465498,
+      "price": 14495.479,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465499,
+      "price": 14495.47,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465500,
+      "price": 14495.461,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465501,
+      "price": 14495.437,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465502,
+      "price": 14495.421,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465503,
+      "price": 14495.411,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465504,
+      "price": 14495.389,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465505,
+      "price": 14495.382,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465506,
+      "price": 14495.352,
+      "source": "history"
+    },
+    {
+      "epoch": 1794465507,
+      "price": 14495.343,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465508,
+      "price": 14495.322,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465509,
+      "price": 14495.288,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465510,
+      "price": 14495.287,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465511,
+      "price": 14495.262,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465512,
+      "price": 14495.261,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465513,
+      "price": 14495.251,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465514,
+      "price": 14495.244,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465515,
+      "price": 14495.232,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465516,
+      "price": 14495.227,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465517,
+      "price": 14495.225,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465518,
+      "price": 14495.209,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465519,
+      "price": 14495.198,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465520,
+      "price": 14495.178,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465521,
+      "price": 14495.16,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465522,
+      "price": 14495.156,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465523,
+      "price": 14495.136,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465524,
+      "price": 14495.136,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465525,
+      "price": 14495.111,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465526,
+      "price": 14495.088,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465527,
+      "price": 14495.074,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465528,
+      "price": 14495.073,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465529,
+      "price": 14495.069,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465530,
+      "price": 14495.035,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465531,
+      "price": 14495.025,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465532,
+      "price": 14495.014,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465533,
+      "price": 14495.007,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465534,
+      "price": 14494.995,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465535,
+      "price": 14494.969,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465536,
+      "price": 14494.966,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465537,
+      "price": 14494.95,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465538,
+      "price": 14494.906,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465539,
+      "price": 14494.902,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465540,
+      "price": 14494.896,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465541,
+      "price": 14494.892,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465542,
+      "price": 14494.884,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465543,
+      "price": 14494.868,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465544,
+      "price": 14494.861,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465545,
+      "price": 14494.848,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465546,
+      "price": 14494.832,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465547,
+      "price": 14494.826,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465548,
+      "price": 14494.807,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465549,
+      "price": 14494.782,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465550,
+      "price": 14494.762,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465551,
+      "price": 14494.746,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465552,
+      "price": 14494.745,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465553,
+      "price": 14494.745,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465554,
+      "price": 14494.71,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465555,
+      "price": 14494.682,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465556,
+      "price": 14494.672,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465557,
+      "price": 14494.666,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465558,
+      "price": 14494.66,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465559,
+      "price": 14494.65,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465560,
+      "price": 14494.618,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465561,
+      "price": 14494.607,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465562,
+      "price": 14494.595,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465563,
+      "price": 14494.571,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465564,
+      "price": 14494.558,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465565,
+      "price": 14494.543,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465566,
+      "price": 14494.518,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465567,
+      "price": 14494.488,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465568,
+      "price": 14494.484,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465569,
+      "price": 14494.467,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465570,
+      "price": 14494.443,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465571,
+      "price": 14494.431,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465572,
+      "price": 14494.421,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465573,
+      "price": 14494.419,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465574,
+      "price": 14494.414,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465575,
+      "price": 14494.402,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465576,
+      "price": 14494.376,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465577,
+      "price": 14494.369,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465578,
+      "price": 14494.344,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465579,
+      "price": 14494.335,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465580,
+      "price": 14494.319,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465581,
+      "price": 14494.317,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465582,
+      "price": 14494.296,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465583,
+      "price": 14494.276,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465584,
+      "price": 14494.265,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465585,
+      "price": 14494.255,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465586,
+      "price": 14494.231,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465587,
+      "price": 14494.202,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465588,
+      "price": 14494.19,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465589,
+      "price": 14494.183,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465590,
+      "price": 14494.183,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465591,
+      "price": 14494.172,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465592,
+      "price": 14494.167,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465593,
+      "price": 14494.141,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465594,
+      "price": 14494.114,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465595,
+      "price": 14494.113,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465596,
+      "price": 14494.109,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465597,
+      "price": 14494.08,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465598,
+      "price": 14494.058,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465599,
+      "price": 14494.038,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465600,
+      "price": 14494.03,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465601,
+      "price": 14494.025,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465602,
+      "price": 14494.005,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465603,
+      "price": 14494.004,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465604,
+      "price": 14493.981,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465605,
+      "price": 14493.968,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465606,
+      "price": 14493.953,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465607,
+      "price": 14493.945,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465608,
+      "price": 14493.927,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465609,
+      "price": 14493.909,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465610,
+      "price": 14493.866,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465611,
+      "price": 14493.838,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465612,
+      "price": 14493.836,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465613,
+      "price": 14493.82,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465614,
+      "price": 14493.796,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465615,
+      "price": 14493.784,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465616,
+      "price": 14493.774,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465617,
+      "price": 14493.762,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465618,
+      "price": 14493.73,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465619,
+      "price": 14493.723,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465620,
+      "price": 14493.714,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465621,
+      "price": 14493.695,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465622,
+      "price": 14493.688,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465623,
+      "price": 14493.674,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465624,
+      "price": 14493.67,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465625,
+      "price": 14493.65,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465626,
+      "price": 14493.643,
+      "source": "live"
+    },
+    {
+      "epoch": 1794465627,
+      "price": 14493.636,
+      "source": "live"
+    }
+  ],
+  "spikes": [
+    {
+      "epoch": 1794465120,
+      "variation": 0.00036113191365840094,
+      "price_before": 14496.088,
+      "price_after": 14501.323
+    }
+  ],
+  "analysis": {
+    "status": "completed",
+    "updated_at": "2026-11-12T06:40:27.696562+00:00",
+    "symbol": "BOOM1000",
+    "total_ticks": 1121,
+    "total_spikes": 1,
+    "spike_threshold": 0.00036113191365840094,
+    "training_samples": 749,
+    "testing_samples": 322,
+    "true_positive": 0,
+    "false_positive": 0,
+    "false_negative": 0,
+    "true_negative": 322,
+    "precision": 0.0,
+    "recall": 0.0,
+    "false_positive_rate": 0.0,
+    "top_patterns": [
+      {
+        "configuration": [
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observations": 719,
+        "spikes": 20,
+        "probability": 0.027816
+      },
+      {
+        "configuration": [
+          4,
+          0,
+          4,
+          0,
+          0
+        ],
+        "observations": 20,
+        "spikes": 0,
+        "probability": 0.0
+      }
+    ],
+    "note": "Analyse statistique expérimentale. Aucune garantie sur les mouvements futurs."
+  },
+  "prediction": {
+    "updated_at": "2026-11-12T06:40:27.696652+00:00",
+    "result": {
+      "configuration": [
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observations": 719,
+      "historical_probability": 0.027816,
+      "signal": "AUCUN SIGNAL FORT"
+    },
+    "warning": "Résultat statistique expérimental, sans garantie de prédiction."
+  },
+  "errors": []
+}
