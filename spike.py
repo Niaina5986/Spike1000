@@ -20,6 +20,7 @@ import websocket
 # ============================================================
 
 SYMBOL = os.getenv("DERIV_SYMBOL", "BOOM1000")
+
 HISTORY_COUNT = int(os.getenv("HISTORY_COUNT", "5000"))
 COLLECT_SECONDS = int(os.getenv("COLLECT_SECONDS", "180"))
 FUTURE_TICKS = int(os.getenv("FUTURE_TICKS", "20"))
@@ -39,7 +40,7 @@ def utc_now():
 
 def empty_db():
     return {
-        "version": 3,
+        "version": 4,
         "symbol": SYMBOL,
         "created_at": utc_now(),
         "updated_at": None,
@@ -52,6 +53,7 @@ def empty_db():
 
 
 def load_db():
+
     if not DB_FILE.exists():
         return empty_db()
 
@@ -63,7 +65,8 @@ def load_db():
             raise ValueError("Format JSON invalide")
 
     except Exception as exc:
-        print("Erreur lecture DB :", exc)
+
+        print("Erreur lecture DB :", repr(exc))
 
         backup = DB_FILE.with_name(
             "db.corrupt-" + str(int(time.time())) + ".json"
@@ -71,6 +74,7 @@ def load_db():
 
         try:
             DB_FILE.replace(backup)
+            print("Ancienne base sauvegardée :", backup.name)
         except Exception:
             pass
 
@@ -81,16 +85,28 @@ def load_db():
     for key, value in defaults.items():
         db.setdefault(key, value)
 
-    if not isinstance(db["ticks"], list):
+    if not isinstance(db.get("ticks"), list):
         db["ticks"] = []
 
-    if not isinstance(db["errors"], list):
+    if not isinstance(db.get("spikes"), list):
+        db["spikes"] = []
+
+    if not isinstance(db.get("errors"), list):
         db["errors"] = []
+
+    if not isinstance(db.get("analysis"), dict):
+        db["analysis"] = {}
+
+    if not isinstance(db.get("prediction"), dict):
+        db["prediction"] = {}
+
+    db["symbol"] = SYMBOL
 
     return db
 
 
 def save_db(db):
+
     db["updated_at"] = utc_now()
 
     temporary = DB_FILE.with_suffix(".tmp")
@@ -102,11 +118,12 @@ def save_db(db):
 
     temporary.replace(DB_FILE)
 
-    print("DB sauvegardée :", DB_FILE)
+    print("Base sauvegardée :", DB_FILE)
 
 
 def record_error(db, message):
-    db["errors"].append({
+
+    db.setdefault("errors", []).append({
         "time": utc_now(),
         "message": str(message)
     })
@@ -129,22 +146,19 @@ def connect_deriv():
     for attempt, delay in enumerate(delays, start=1):
 
         try:
+
             print(
                 f"Connexion Deriv : "
                 f"tentative {attempt}/{len(delays)}"
             )
 
+            # Même méthode que le test_deriv.py réussi.
             ws = websocket.create_connection(
                 WS_URL,
-                timeout=30,
-                enable_multithread=True
+                timeout=30
             )
 
-            ws.settimeout(2)
-
             print("Connexion Deriv réussie.")
-            print("Mode public : lecture seule.")
-
             return ws
 
         except Exception as exc:
@@ -154,13 +168,17 @@ def connect_deriv():
             print("Erreur connexion :", repr(exc))
 
             if attempt < len(delays):
-                print(f"Nouvelle tentative dans {delay}s")
+                print(f"Nouvelle tentative dans {delay} secondes.")
                 time.sleep(delay)
 
     raise RuntimeError(
         f"Connexion Deriv impossible : {last_error}"
     )
 
+
+# ============================================================
+# RECEPTION DES MESSAGES HISTORIQUES
+# ============================================================
 
 def receive_message(ws, timeout=10):
 
@@ -169,6 +187,7 @@ def receive_message(ws, timeout=10):
     while time.monotonic() < deadline:
 
         try:
+
             raw = ws.recv()
 
             if not raw:
@@ -177,6 +196,7 @@ def receive_message(ws, timeout=10):
             data = json.loads(raw)
 
             if "error" in data:
+
                 error = data["error"]
 
                 raise RuntimeError(
@@ -191,85 +211,92 @@ def receive_message(ws, timeout=10):
     return None
 
 
-def send_request(ws, payload):
-    ws.send(json.dumps(payload))
-
-
 # ============================================================
 # HISTORIQUE DERIV
 # ============================================================
 
-def collect_history(ws):
+def collect_history():
 
     print(
         f"Demande de {HISTORY_COUNT} ticks historiques "
         f"pour {SYMBOL}..."
     )
 
-    send_request(ws, {
-        "ticks_history": SYMBOL,
-        "count": HISTORY_COUNT,
-        "end": "latest",
-        "style": "ticks",
-        "req_id": 1001
-    })
+    ws = None
 
-    deadline = time.monotonic() + 60
+    try:
 
-    while time.monotonic() < deadline:
+        ws = connect_deriv()
 
-        data = receive_message(ws, timeout=5)
+        ws.send(json.dumps({
+            "ticks_history": SYMBOL,
+            "count": HISTORY_COUNT,
+            "end": "latest",
+            "style": "ticks",
+            "req_id": 1001
+        }))
 
-        if not data:
-            continue
+        deadline = time.monotonic() + 60
 
-        history = data.get("history")
+        while time.monotonic() < deadline:
 
-        if history is None:
-            continue
+            data = receive_message(ws, timeout=5)
 
-        prices = history.get("prices", [])
-        times = history.get("times", [])
-
-        rows = []
-
-        for timestamp, price in zip(times, prices):
-
-            try:
-                price = float(price)
-
-                if price > 0:
-                    rows.append({
-                        "epoch": int(timestamp),
-                        "price": price,
-                        "source": "history"
-                    })
-
-            except (ValueError, TypeError):
+            if not data:
                 continue
 
-        if not rows:
-            raise RuntimeError(
-                "Historique Deriv vide."
-            )
+            history = data.get("history")
 
-        rows.sort(key=lambda x: x["epoch"])
+            if history is None:
+                continue
 
-        print(
-            "Historique récupéré :",
-            len(rows),
-            "ticks"
+            prices = history.get("prices", [])
+            times = history.get("times", [])
+
+            rows = []
+
+            for timestamp, price in zip(times, prices):
+
+                try:
+
+                    price = float(price)
+
+                    if price > 0:
+
+                        rows.append({
+                            "epoch": int(timestamp),
+                            "price": price,
+                            "source": "history"
+                        })
+
+                except (ValueError, TypeError):
+                    continue
+
+            if not rows:
+                raise RuntimeError("Historique Deriv vide.")
+
+            rows.sort(key=lambda x: x["epoch"])
+
+            print("Historique récupéré :", len(rows), "ticks")
+
+            return rows
+
+        raise TimeoutError(
+            "Aucune réponse historique après 60 secondes."
         )
 
-        return rows
+    finally:
 
-    raise TimeoutError(
-        "Aucune réponse historique reçue."
-    )
+        if ws is not None:
+            try:
+                ws.close()
+            except Exception:
+                pass
 
 
 # ============================================================
-# COLLECTE EN DIRECT AVEC RECONNEXION
+# COLLECTE LIVE
+# MÉTHODE IDENTIQUE AU TEST DERIV RÉUSSI
 # ============================================================
 
 def collect_live():
@@ -280,105 +307,128 @@ def collect_live():
     )
 
     rows = []
+    ws = None
+    subscription_id = None
 
-    deadline = time.monotonic() + COLLECT_SECONDS
+    try:
 
-    attempts = 0
-    max_attempts = 3
+        # Connexion identique au test réussi.
+        ws = websocket.create_connection(
+            WS_URL,
+            timeout=30
+        )
 
-    while time.monotonic() < deadline:
+        print("Connexion live réussie.")
 
-        ws = None
+        # Abonnement identique au test réussi.
+        ws.send(json.dumps({
+            "ticks": SYMBOL,
+            "subscribe": 1,
+            "req_id": 2001
+        }))
 
-        try:
+        print("Abonnement envoyé.")
 
-            attempts += 1
+        deadline = time.monotonic() + COLLECT_SECONDS
 
-            print(
-                f"Connexion live : tentative {attempts}"
-            )
+        while time.monotonic() < deadline:
 
-            ws = connect_deriv()
+            try:
 
-            send_request(ws, {
-                "ticks": SYMBOL,
-                "subscribe": 1,
-                "req_id": 1002
-            })
+                raw = ws.recv()
 
-            subscription_id = None
+                if not raw:
+                    continue
 
-            while time.monotonic() < deadline:
+                data = json.loads(raw)
 
-                data = receive_message(ws, timeout=5)
+                if "error" in data:
 
-                if not data:
+                    print("Erreur Deriv :", data["error"])
                     continue
 
                 if data.get("subscription"):
+
                     subscription_id = data[
                         "subscription"
-                    ].get("id")
+                    ].get("id", subscription_id)
 
                 tick = data.get("tick")
 
                 if tick:
 
                     try:
+
                         epoch = int(tick["epoch"])
                         price = float(tick["quote"])
 
                         if price > 0:
+
                             rows.append({
                                 "epoch": epoch,
                                 "price": price,
                                 "source": "live"
                             })
 
+                            if len(rows) % 10 == 0:
+
+                                print(
+                                    "Ticks live reçus :",
+                                    len(rows)
+                                )
+
                     except (KeyError, ValueError, TypeError):
                         continue
 
+            except websocket.WebSocketTimeoutException:
+
+                print("En attente des prochains ticks...")
+                continue
+
+            except websocket.WebSocketConnectionClosedException as exc:
+
+                print(
+                    "Connexion live interrompue :",
+                    repr(exc)
+                )
+
+                break
+
+            except Exception as exc:
+
+                print(
+                    "Erreur réception live :",
+                    repr(exc)
+                )
+
+                break
+
+    except Exception as exc:
+
+        print("Erreur collecte live :", repr(exc))
+
+    finally:
+
+        if ws is not None:
+
             if subscription_id:
+
                 try:
-                    send_request(ws, {
+
+                    ws.send(json.dumps({
                         "forget": subscription_id,
-                        "req_id": 1003
-                    })
+                        "req_id": 2002
+                    }))
+
                 except Exception:
                     pass
 
-            break
+            try:
+                ws.close()
+            except Exception:
+                pass
 
-        except Exception as exc:
-
-            print(
-                "Collecte interrompue :",
-                repr(exc)
-            )
-
-            if time.monotonic() < deadline:
-                print("Tentative de reconnexion...")
-
-                if attempts >= max_attempts:
-                    print(
-                        "Nombre maximal de tentatives atteint."
-                    )
-                    break
-
-                time.sleep(3)
-
-        finally:
-
-            if ws is not None:
-                try:
-                    ws.close()
-                except Exception:
-                    pass
-
-    print(
-        "Ticks en direct récupérés :",
-        len(rows)
-    )
+    print("Collecte live terminée :", len(rows), "ticks.")
 
     return rows
 
@@ -394,11 +444,17 @@ def merge_ticks(db, new_rows):
     for row in db["ticks"]:
 
         try:
+
             epoch = int(row["epoch"])
             price = float(row["price"])
 
             if price > 0:
-                existing[(epoch, price)] = row
+
+                existing[(epoch, price)] = {
+                    "epoch": epoch,
+                    "price": price,
+                    "source": row.get("source", "previous")
+                }
 
         except Exception:
             continue
@@ -406,6 +462,7 @@ def merge_ticks(db, new_rows):
     for row in new_rows:
 
         try:
+
             epoch = int(row["epoch"])
             price = float(row["price"])
 
@@ -415,6 +472,7 @@ def merge_ticks(db, new_rows):
             key = (epoch, price)
 
             if key not in existing:
+
                 existing[key] = {
                     "epoch": epoch,
                     "price": price,
@@ -431,10 +489,7 @@ def merge_ticks(db, new_rows):
 
     db["ticks"] = ordered[-100000:]
 
-    print(
-        "Total ticks uniques :",
-        len(db["ticks"])
-    )
+    print("Total ticks uniques :", len(db["ticks"]))
 
 
 # ============================================================
@@ -444,7 +499,7 @@ def merge_ticks(db, new_rows):
 def percentile(values, q):
 
     if not values:
-        return 0
+        return 0.0
 
     values = sorted(values)
 
@@ -471,11 +526,14 @@ def calculate_returns(prices):
         current = prices[i]
 
         if previous > 0:
+
             returns.append(
                 (current - previous) / previous
             )
+
         else:
-            returns.append(0)
+
+            returns.append(0.0)
 
     return returns
 
@@ -489,7 +547,7 @@ def detect_spikes(prices, epochs):
     returns = calculate_returns(prices)
 
     positive = [
-        x for x in returns if x > 0
+        value for value in returns if value > 0
     ]
 
     threshold = percentile(positive, 0.995)
@@ -524,7 +582,7 @@ def detect_spikes(prices, epochs):
 
 
 # ============================================================
-# ANALYSE DES CONFIGURATIONS
+# CARACTERISTIQUES STATISTIQUES
 # ============================================================
 
 def get_features(returns, index):
@@ -539,11 +597,11 @@ def get_features(returns, index):
         return None
 
     negative_count = sum(
-        1 for x in last10 if x < 0
+        1 for value in last10 if value < 0
     )
 
     average_movement = statistics.mean(
-        abs(x) for x in last10
+        abs(value) for value in last10
     )
 
     volatility = statistics.pstdev(last30)
@@ -666,7 +724,7 @@ def analyze_data(db):
 
         probability = (
             pattern["positive"] / total
-            if total else 0
+            if total else 0.0
         )
 
         predicted = (
@@ -689,17 +747,17 @@ def analyze_data(db):
 
     precision = (
         tp / (tp + fp)
-        if tp + fp else 0
+        if tp + fp else 0.0
     )
 
     recall = (
         tp / (tp + fn)
-        if tp + fn else 0
+        if tp + fn else 0.0
     )
 
     false_positive_rate = (
         fp / (fp + tn)
-        if fp + tn else 0
+        if fp + tn else 0.0
     )
 
     best_patterns = []
@@ -828,7 +886,7 @@ def analyze_data(db):
 
 
 # ============================================================
-# PROGRAMME PRINCIPAL
+# EXECUTION PRINCIPALE
 # ============================================================
 
 def main():
@@ -840,15 +898,11 @@ def main():
 
     db = load_db()
 
-    # 1. HISTORIQUE
-
-    ws = None
+    # ETAPE 1 : HISTORIQUE
 
     try:
 
-        ws = connect_deriv()
-
-        history = collect_history(ws)
+        history = collect_history()
 
         merge_ticks(db, history)
 
@@ -861,19 +915,12 @@ def main():
         record_error(db, repr(exc))
 
         if not db["ticks"]:
+
             raise RuntimeError(
                 "Impossible de récupérer les données historiques."
             )
 
-    finally:
-
-        if ws is not None:
-            try:
-                ws.close()
-            except Exception:
-                pass
-
-    # 2. COLLECTE LIVE
+    # ETAPE 2 : COLLECTE EN DIRECT
 
     try:
 
@@ -892,7 +939,7 @@ def main():
 
         record_error(db, repr(exc))
 
-    # 3. ANALYSE
+    # ETAPE 3 : ANALYSE
 
     try:
 
@@ -906,7 +953,7 @@ def main():
 
         raise
 
-    # 4. SAUVEGARDE FINALE
+    # ETAPE 4 : SAUVEGARDE
 
     save_db(db)
 
@@ -919,4 +966,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+
+    try:
+        main()
+
+    except Exception as exc:
+
+        print("ECHEC DU PROGRAMME :", repr(exc))
+        sys.exit(1)
