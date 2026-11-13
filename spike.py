@@ -1,16 +1,14 @@
 import json
 import os
 import time
-import itertools
 from datetime import datetime, timezone
 
 import websocket
 
-# ==========================================================
-# SPIKE1000 V9 - PRECURSOR DETECTOR
-# BOOM1000 - BOUGIES DE 1 MINUTE
-# ANALYSE UNIQUEMENT - AUCUN TRADE
-# ==========================================================
+
+# =====================================================
+# CONFIGURATION
+# =====================================================
 
 SYMBOL = "BOOM1000"
 GRANULARITY = 60
@@ -20,846 +18,572 @@ FUTURE_CANDLES = 5
 WS_URL = "wss://api.derivws.com/trading/v1/options/ws/public"
 DB_FILE = "db.json"
 
-TRAIN_RATIO = 0.60
-VALIDATION_RATIO = 0.20
 
-MIN_TRAIN_EVENTS = 3
-MIN_VALIDATION_EVENTS = 2
-
-
-def now():
-    return datetime.now(timezone.utc).isoformat()
-
-
-def save_json(data):
-    temp = DB_FILE + ".tmp"
-
-    with open(temp, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
-
-    os.replace(temp, DB_FILE)
-
-
-def load_previous():
-    if not os.path.exists(DB_FILE):
-        return {}
-
-    try:
-        with open(DB_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception:
-        return {}
-
-
-# ==========================================================
-# RECUPERATION DES BOUGIES
-# ==========================================================
+# =====================================================
+# CONNEXION DERIV
+# =====================================================
 
 def get_candles():
+    last_error = None
 
-    ws = None
+    for attempt in range(3):
+        ws = None
 
-    try:
-        ws = websocket.create_connection(
-            WS_URL,
-            timeout=25
-        )
-
-        request = {
-            "ticks_history": SYMBOL,
-            "adjust_start_time": 1,
-            "count": CANDLE_COUNT,
-            "end": "latest",
-            "granularity": GRANULARITY,
-            "style": "candles",
-            "req_id": 1001
-        }
-
-        ws.send(json.dumps(request))
-
-        deadline = time.time() + 30
-
-        while time.time() < deadline:
-
-            response = json.loads(ws.recv())
-
-            if response.get("error"):
-                raise RuntimeError(
-                    response["error"].get("message", "Erreur Deriv")
-                )
-
-            if response.get("req_id") != 1001:
-                continue
-
-            raw = response.get("candles", [])
-
-            if not raw:
-                raise RuntimeError("Aucune bougie reçue.")
-
-            candles = []
-
-            for c in raw:
-
-                candle = {
-                    "epoch": int(c["epoch"]),
-                    "open": float(c["open"]),
-                    "high": float(c["high"]),
-                    "low": float(c["low"]),
-                    "close": float(c["close"])
-                }
-
-                if (
-                    candle["low"] <= 0
-                    or candle["high"] < candle["low"]
-                    or candle["high"] < candle["open"]
-                    or candle["high"] < candle["close"]
-                    or candle["low"] > candle["open"]
-                    or candle["low"] > candle["close"]
-                ):
-                    continue
-
-                candles.append(candle)
-
-            candles.sort(key=lambda x: x["epoch"])
-
-            unique = {}
-
-            for c in candles:
-                unique[c["epoch"]] = c
-
-            candles = list(unique.values())
-
-            if len(candles) < 150:
-                raise RuntimeError(
-                    f"Historique insuffisant : {len(candles)}"
-                )
-
-            return candles
-
-        raise TimeoutError("Délai Deriv dépassé.")
-
-    finally:
-        if ws:
-            try:
-                ws.close()
-            except Exception:
-                pass
-
-
-# ==========================================================
-# INDICATEURS
-# ==========================================================
-
-def ema(values, period):
-
-    result = [None] * len(values)
-
-    if len(values) < period:
-        return result
-
-    current = sum(values[:period]) / period
-    result[period - 1] = current
-
-    multiplier = 2 / (period + 1)
-
-    for i in range(period, len(values)):
-
-        current = (
-            values[i] * multiplier
-            + current * (1 - multiplier)
-        )
-
-        result[i] = current
-
-    return result
-
-
-def rsi(values, period=14):
-
-    result = [None] * len(values)
-
-    if len(values) <= period:
-        return result
-
-    changes = [
-        values[i] - values[i - 1]
-        for i in range(1, len(values))
-    ]
-
-    gains = [max(x, 0) for x in changes]
-    losses = [max(-x, 0) for x in changes]
-
-    avg_gain = sum(gains[:period]) / period
-    avg_loss = sum(losses[:period]) / period
-
-    result[period] = (
-        100 if avg_loss == 0
-        else 100 - 100 / (1 + avg_gain / avg_loss)
-    )
-
-    for i in range(period + 1, len(values)):
-
-        avg_gain = (
-            avg_gain * (period - 1) + gains[i - 1]
-        ) / period
-
-        avg_loss = (
-            avg_loss * (period - 1) + losses[i - 1]
-        ) / period
-
-        result[i] = (
-            100 if avg_loss == 0
-            else 100 - 100 / (1 + avg_gain / avg_loss)
-        )
-
-    return result
-
-
-def atr(highs, lows, closes, period=14):
-
-    result = [None] * len(closes)
-    trs = []
-
-    for i in range(len(closes)):
-
-        if i == 0:
-            tr = highs[i] - lows[i]
-        else:
-            tr = max(
-                highs[i] - lows[i],
-                abs(highs[i] - closes[i - 1]),
-                abs(lows[i] - closes[i - 1])
+        try:
+            ws = websocket.create_connection(
+                WS_URL,
+                timeout=25
             )
 
-        trs.append(tr)
+            request = {
+                "ticks_history": SYMBOL,
+                "adjust_start_time": 1,
+                "count": CANDLE_COUNT,
+                "end": "latest",
+                "granularity": GRANULARITY,
+                "style": "candles",
+                "req_id": 1001
+            }
 
-    if len(trs) < period:
+            ws.send(json.dumps(request))
+
+            while True:
+                response = json.loads(ws.recv())
+
+                if "error" in response:
+                    raise RuntimeError(
+                        response["error"].get("message", "Deriv error")
+                    )
+
+                if response.get("msg_type") == "candles":
+                    candles = response.get("candles", [])
+
+                    if len(candles) < 150:
+                        raise RuntimeError("Pas assez de bougies reçues")
+
+                    return sorted(
+                        candles,
+                        key=lambda x: int(x["epoch"])
+                    )
+
+        except Exception as exc:
+            last_error = str(exc)
+            time.sleep(3)
+
+        finally:
+            if ws:
+                try:
+                    ws.close()
+                except Exception:
+                    pass
+
+    raise RuntimeError(f"Connexion Deriv impossible : {last_error}")
+
+
+# =====================================================
+# INDICATEURS
+# =====================================================
+
+def calculate_indicators(candles):
+    closes = [float(c["close"]) for c in candles]
+    highs = [float(c["high"]) for c in candles]
+    lows = [float(c["low"]) for c in candles]
+    opens = [float(c["open"]) for c in candles]
+
+    def ema(values, period):
+        result = [None] * len(values)
+
+        if len(values) < period:
+            return result
+
+        current = sum(values[:period]) / period
+        result[period - 1] = current
+
+        multiplier = 2 / (period + 1)
+
+        for i in range(period, len(values)):
+            current = (
+                values[i] * multiplier
+                + current * (1 - multiplier)
+            )
+            result[i] = current
+
         return result
-
-    current = sum(trs[:period]) / period
-    result[period - 1] = current
-
-    for i in range(period, len(trs)):
-
-        current = (
-            current * (period - 1) + trs[i]
-        ) / period
-
-        result[i] = current
-
-    return result
-
-
-# ==========================================================
-# CONSTRUCTION DES CARACTERISTIQUES
-# ==========================================================
-
-def build_features(candles):
-
-    closes = [c["close"] for c in candles]
-    highs = [c["high"] for c in candles]
-    lows = [c["low"] for c in candles]
 
     ema5 = ema(closes, 5)
     ema20 = ema(closes, 20)
     ema50 = ema(closes, 50)
 
-    rsi14 = rsi(closes, 14)
-    atr14 = atr(highs, lows, closes, 14)
+    tr = []
+
+    for i in range(len(candles)):
+        if i == 0:
+            tr.append(highs[i] - lows[i])
+        else:
+            tr.append(max(
+                highs[i] - lows[i],
+                abs(highs[i] - closes[i - 1]),
+                abs(lows[i] - closes[i - 1])
+            ))
+
+    atr = [None] * len(candles)
+
+    for i in range(13, len(candles)):
+        atr[i] = sum(tr[i - 13:i + 1]) / 14
+
+    rsi = [None] * len(candles)
+
+    for i in range(14, len(candles)):
+        gains = []
+        losses = []
+
+        for j in range(i - 13, i + 1):
+            change = closes[j] - closes[j - 1]
+            gains.append(max(change, 0))
+            losses.append(max(-change, 0))
+
+        avg_gain = sum(gains) / 14
+        avg_loss = sum(losses) / 14
+
+        if avg_loss == 0:
+            rsi[i] = 100
+        else:
+            rs = avg_gain / avg_loss
+            rsi[i] = 100 - (100 / (1 + rs))
 
     features = []
 
-    for i, c in enumerate(candles):
-
-        if i < 50:
+    for i in range(len(candles)):
+        if (
+            atr[i] is None
+            or ema5[i] is None
+            or ema20[i] is None
+            or ema50[i] is None
+            or rsi[i] is None
+            or atr[i] <= 0
+        ):
             features.append(None)
             continue
 
-        o = c["open"]
-        h = c["high"]
-        l = c["low"]
-        cl = c["close"]
+        a = atr[i]
 
-        candle_range = max(h - l, 0.000001)
-
-        body = cl - o
-        upper_wick = h - max(o, cl)
-        lower_wick = min(o, cl) - l
-
-        previous = candles[i - 1]
-
-        change1 = cl - previous["close"]
-
-        change3 = (
-            cl - candles[i - 3]["close"]
+        red_count = sum(
+            1 for j in range(max(0, i - 4), i + 1)
+            if closes[j] < opens[j]
         )
 
-        change5 = (
-            cl - candles[i - 5]["close"]
+        green_count = sum(
+            1 for j in range(max(0, i - 4), i + 1)
+            if closes[j] > opens[j]
         )
 
-        red_count = 0
-        green_count = 0
-
-        for j in range(i - 4, i + 1):
-
-            if candles[j]["close"] < candles[j]["open"]:
-                red_count += 1
-
-            elif candles[j]["close"] > candles[j]["open"]:
-                green_count += 1
+        candle_range = max(highs[i] - lows[i], 0.000001)
 
         features.append({
-
-            "rsi14": rsi14[i],
-
-            "ema5_above_ema20": int(
-                ema5[i] > ema20[i]
+            "rsi": round(rsi[i], 2),
+            "ema20_distance": round((closes[i] - ema20[i]) / a, 3),
+            "ema50_distance": round((closes[i] - ema50[i]) / a, 3),
+            "change3": round(
+                (closes[i] - closes[max(0, i - 3)]) / a, 3
             ),
-
-            "ema20_above_ema50": int(
-                ema20[i] > ema50[i]
-            ),
-
-            "distance_ema20": (
-                cl - ema20[i]
-            ) / max(atr14[i], 0.000001),
-
-            "distance_ema50": (
-                cl - ema50[i]
-            ) / max(atr14[i], 0.000001),
-
-            "body_atr": (
-                body / max(atr14[i], 0.000001)
-            ),
-
-            "upper_wick_ratio": (
-                upper_wick / candle_range
-            ),
-
-            "lower_wick_ratio": (
-                lower_wick / candle_range
-            ),
-
-            "range_atr": (
-                candle_range / max(atr14[i], 0.000001)
-            ),
-
-            "change1_atr": (
-                change1 / max(atr14[i], 0.000001)
-            ),
-
-            "change3_atr": (
-                change3 / max(atr14[i], 0.000001)
-            ),
-
-            "change5_atr": (
-                change5 / max(atr14[i], 0.000001)
-            ),
-
+            "body": round((closes[i] - opens[i]) / a, 3),
             "red_count": red_count,
             "green_count": green_count,
-
-            "atr": atr14[i]
+            "atr": round(a, 3)
         })
 
-    return features
+    return closes, highs, lows, atr, features
 
 
-# ==========================================================
-# EXCURSION FUTURE
-# ==========================================================
+# =====================================================
+# SEUIL AUTOMATIQUE DE VOLATILITE
+# =====================================================
 
-def future_excursions(candles):
+def calculate_threshold(atr, start, end):
+    values = [
+        x for x in atr[start:end]
+        if x is not None and x > 0
+    ]
 
-    values = [None] * len(candles)
+    if len(values) < 20:
+        raise RuntimeError("Historique ATR insuffisant")
 
-    for i in range(len(candles) - FUTURE_CANDLES):
+    values.sort()
 
-        future = candles[
-            i + 1:i + 1 + FUTURE_CANDLES
-        ]
+    median_atr = values[len(values) // 2]
 
-        # Hausse maximale depuis la clôture du signal.
-        highest = max(c["high"] for c in future)
+    # Seuil dynamique : 2,5 fois l'ATR médian
+    return median_atr * 2.5
 
-        values[i] = max(
-            0,
-            highest - candles[i]["close"]
+
+# =====================================================
+# DETECTION DES EVENEMENTS
+# =====================================================
+
+def detect_events(candles, highs, closes, atr, start, end):
+    events = []
+
+    for i in range(start, end - FUTURE_CANDLES):
+        if atr[i] is None or atr[i] <= 0:
+            continue
+
+        threshold = atr[i] * 2.5
+
+        future_high = max(
+            highs[i + 1:i + 1 + FUTURE_CANDLES]
         )
 
-    return values
+        excursion = future_high - closes[i]
 
-
-def percentile(values, p):
-
-    values = sorted(values)
-
-    if not values:
-        return None
-
-    position = (len(values) - 1) * p / 100
-
-    low = int(position)
-    high = min(low + 1, len(values) - 1)
-
-    weight = position - low
-
-    return (
-        values[low] * (1 - weight)
-        + values[high] * weight
-    )
-
-
-# ==========================================================
-# CREATION DES CONDITIONS
-# ==========================================================
-
-def make_conditions():
-
-    conditions = []
-
-    # RSI
-    for level in [25, 30, 35, 40, 45]:
-        conditions.append({
-            "feature": "rsi14",
-            "operator": "<=",
-            "value": level
-        })
-
-    # EMA
-    for feature in [
-        "ema5_above_ema20",
-        "ema20_above_ema50"
-    ]:
-        conditions.append({
-            "feature": feature,
-            "operator": "==",
-            "value": 1
-        })
-
-    # Mèches
-    for feature in [
-        "upper_wick_ratio",
-        "lower_wick_ratio"
-    ]:
-        for level in [0.2, 0.35, 0.5, 0.65]:
-            conditions.append({
-                "feature": feature,
-                "operator": ">=",
-                "value": level
+        if excursion >= threshold:
+            events.append({
+                "index": i,
+                "epoch": int(candles[i]["epoch"]),
+                "excursion": round(excursion, 3),
+                "threshold": round(threshold, 3)
             })
 
-    # Pression des dernières bougies
-    for feature in [
-        "change1_atr",
-        "change3_atr",
-        "change5_atr",
-        "body_atr",
-        "distance_ema20",
-        "distance_ema50"
-    ]:
-        for level in [-1.5, -0.75, 0, 0.5, 1.0]:
-            conditions.append({
-                "feature": feature,
-                "operator": "<=",
-                "value": level
+    # Fusion des fenêtres qui correspondent à une même hausse.
+    # Une hausse ne doit pas être comptée plusieurs fois.
+    grouped = []
+
+    for event in events:
+        if (
+            not grouped
+            or event["index"] - grouped[-1]["last_index"]
+            > FUTURE_CANDLES
+        ):
+            grouped.append({
+                "index": event["index"],
+                "epoch": event["epoch"],
+                "excursion": event["excursion"],
+                "threshold": event["threshold"],
+                "last_index": event["index"]
             })
-
-    # Séries de bougies rouges ou vertes
-    for feature in ["red_count", "green_count"]:
-        for level in [2, 3, 4, 5]:
-            conditions.append({
-                "feature": feature,
-                "operator": ">=",
-                "value": level
-            })
-
-    return conditions
-
-
-def condition_matches(row, condition):
-
-    value = row.get(condition["feature"])
-
-    if value is None:
-        return False
-
-    operator = condition["operator"]
-    target = condition["value"]
-
-    if operator == "<=":
-        return value <= target
-
-    if operator == ">=":
-        return value >= target
-
-    if operator == "==":
-        return value == target
-
-    return False
-
-
-# ==========================================================
-# EVALUATION
-# ==========================================================
-
-def evaluate(
-    features,
-    excursions,
-    start,
-    end,
-    threshold,
-    condition
-):
-
-    signals = 0
-    successes = 0
-
-    for i in range(start, end):
-
-        row = features[i]
-        future = excursions[i]
-
-        if row is None or future is None:
-            continue
-
-        if not condition_matches(row, condition):
-            continue
-
-        signals += 1
-
-        if future >= threshold:
-            successes += 1
-
-    precision = (
-        successes / signals * 100
-        if signals else 0
-    )
-
-    return {
-        "signals": signals,
-        "successes": successes,
-        "precision": round(precision, 2)
-    }
-
-
-# ==========================================================
-# COMPARAISON AVANT LES GRANDES HAUSSES
-# ==========================================================
-
-def compare_precursors(features, excursions, start, end, threshold):
-
-    spike_rows = []
-    normal_rows = []
-
-    for i in range(start, end):
-
-        row = features[i]
-        future = excursions[i]
-
-        if row is None or future is None:
-            continue
-
-        if future >= threshold:
-            spike_rows.append(row)
         else:
-            normal_rows.append(row)
+            grouped[-1]["last_index"] = event["index"]
 
-    numeric_features = [
-        "rsi14",
-        "distance_ema20",
-        "distance_ema50",
-        "body_atr",
-        "upper_wick_ratio",
-        "lower_wick_ratio",
-        "range_atr",
-        "change1_atr",
-        "change3_atr",
-        "change5_atr",
+            if event["excursion"] > grouped[-1]["excursion"]:
+                grouped[-1]["excursion"] = event["excursion"]
+
+    for event in grouped:
+        event.pop("last_index", None)
+
+    return grouped
+
+
+# =====================================================
+# ANALYSE DES PRECURSEURS
+# =====================================================
+
+def compare_precursors(features, events, start, end):
+    fields = [
+        "rsi",
+        "ema20_distance",
+        "ema50_distance",
+        "change3",
+        "body",
         "red_count",
         "green_count"
     ]
 
-    comparison = {}
+    before = {field: [] for field in fields}
+    normal = {field: [] for field in fields}
 
-    for feature in numeric_features:
+    event_indexes = {
+        event["index"] for event in events
+    }
 
-        spike_values = [
-            r[feature] for r in spike_rows
-            if r[feature] is not None
-        ]
+    for index in range(start, end):
+        f = features[index]
 
-        normal_values = [
-            r[feature] for r in normal_rows
-            if r[feature] is not None
-        ]
-
-        if not spike_values or not normal_values:
+        if f is None:
             continue
 
-        comparison[feature] = {
-            "before_spikes_average": round(
-                sum(spike_values) / len(spike_values), 5
-            ),
-            "normal_average": round(
-                sum(normal_values) / len(normal_values), 5
-            ),
-            "spike_samples": len(spike_values),
-            "normal_samples": len(normal_values)
-        }
+        destination = (
+            before
+            if index in event_indexes
+            else normal
+        )
+
+        for field in fields:
+            destination[field].append(f[field])
+
+    comparison = {}
+
+    for field in fields:
+        if before[field] and normal[field]:
+            comparison[field] = {
+                "before_events": round(
+                    sum(before[field]) / len(before[field]), 2
+                ),
+                "normal": round(
+                    sum(normal[field]) / len(normal[field]), 2
+                )
+            }
 
     return comparison
 
 
-# ==========================================================
-# ANALYSE PRINCIPALE
-# ==========================================================
+# =====================================================
+# RECHERCHE DE CONDITIONS
+# =====================================================
 
-def analyze(candles):
+def evaluate_conditions(features, events, start, end):
+    event_indexes = [e["index"] for e in events]
 
-    n = len(candles)
-
-    train_end = int(n * TRAIN_RATIO)
-    validation_end = int(
-        n * (TRAIN_RATIO + VALIDATION_RATIO)
-    )
-
-    features = build_features(candles)
-    excursions = future_excursions(candles)
-
-    train_values = [
-        excursions[i]
-        for i in range(50, train_end)
-        if excursions[i] is not None
-        and excursions[i] > 0
+    conditions = [
+        ("RSI <= 25", lambda f: f["rsi"] <= 25),
+        ("RSI <= 30", lambda f: f["rsi"] <= 30),
+        ("RSI <= 35", lambda f: f["rsi"] <= 35),
+        ("EMA50 distance <= -1", lambda f: f["ema50_distance"] <= -1),
+        ("EMA50 distance <= -2", lambda f: f["ema50_distance"] <= -2),
+        ("Change3 <= -1 ATR", lambda f: f["change3"] <= -1),
+        ("Change3 <= -2 ATR", lambda f: f["change3"] <= -2),
+        ("Red candles >= 4", lambda f: f["red_count"] >= 4)
     ]
-
-    if len(train_values) < 10:
-
-        return {
-            "status": "insufficient_training_data",
-            "total_candles": n,
-            "positive_excursions": len(train_values)
-        }, [], {}
-
-    threshold = percentile(train_values, 95)
-
-    conditions = make_conditions()
 
     results = []
 
-    for condition in conditions:
+    for name, condition in conditions:
+        signals = 0
+        successes = 0
 
-        train = evaluate(
-            features,
-            excursions,
-            50,
-            train_end - FUTURE_CANDLES,
-            threshold,
-            condition
+        for i in range(start, end - FUTURE_CANDLES):
+            f = features[i]
+
+            if f is None or not condition(f):
+                continue
+
+            signals += 1
+
+            if any(
+                i < event_index <= i + FUTURE_CANDLES
+                for event_index in event_indexes
+            ):
+                successes += 1
+
+        precision = (
+            round(successes / signals * 100, 2)
+            if signals else 0
         )
-
-        if train["signals"] < MIN_TRAIN_EVENTS:
-            continue
-
-        validation = evaluate(
-            features,
-            excursions,
-            train_end,
-            validation_end - FUTURE_CANDLES,
-            threshold,
-            condition
-        )
-
-        if validation["signals"] < MIN_VALIDATION_EVENTS:
-            continue
 
         results.append({
-            "condition": condition,
-            "train": train,
-            "validation": validation
+            "condition": name,
+            "signals": signals,
+            "successes": successes,
+            "precision_percent": precision
         })
 
     results.sort(
         key=lambda x: (
-            x["validation"]["precision"],
-            x["validation"]["successes"],
-            x["train"]["precision"]
+            x["precision_percent"],
+            x["successes"]
         ),
         reverse=True
     )
 
-    final_patterns = []
+    return results
 
-    for item in results[:15]:
 
-        test = evaluate(
-            features,
-            excursions,
-            validation_end,
-            n - FUTURE_CANDLES,
-            threshold,
-            item["condition"]
-        )
+# =====================================================
+# SURVEILLANCE ACTUELLE
+# =====================================================
 
-        final_patterns.append({
-            "condition": item["condition"],
-            "train": item["train"],
-            "validation": item["validation"],
-            "test": test
-        })
+def current_status(features, training_patterns):
+    latest = features[-1]
 
-    spikes = []
+    if latest is None:
+        return {
+            "status": "WAIT",
+            "reason": "Indicateurs indisponibles"
+        }
 
-    for i, c in enumerate(candles):
+    valid_patterns = [
+        p for p in training_patterns
+        if p["successes"] >= 2
+        and p["signals"] >= 10
+        and p["precision_percent"] >= 5
+    ]
 
-        value = excursions[i]
+    if not valid_patterns:
+        return {
+            "status": "WAIT",
+            "reason": "Aucun modèle suffisamment validé"
+        }
 
-        if value is None or value < threshold:
-            continue
-
-        spikes.append({
-            "epoch": c["epoch"],
-            "open": c["open"],
-            "high": c["high"],
-            "low": c["low"],
-            "close": c["close"],
-            "future_upward_excursion": round(value, 5)
-        })
-
-    comparison = compare_precursors(
-        features,
-        excursions,
-        50,
-        train_end - FUTURE_CANDLES,
-        threshold
-    )
-
-    summary = {
-
-        "version": 9,
-        "status": "analysis_completed",
-        "updated_at": now(),
-
-        "symbol": SYMBOL,
-        "timeframe_seconds": GRANULARITY,
-
-        "total_candles": n,
-        "train_candles": train_end,
-        "validation_candles": validation_end - train_end,
-        "test_candles": n - validation_end,
-
-        "spike_threshold": round(threshold, 5),
-
-        "threshold_method": (
-            "95th_percentile_of_positive_future_excursions_train"
-        ),
-
-        "future_candles": FUTURE_CANDLES,
-
-        "conditions_tested": len(conditions),
-        "conditions_qualified": len(results),
-
-        "training_spikes": sum(
-            1 for x in excursions[:train_end]
-            if x is not None and x >= threshold
-        ),
-
-        "validation_spikes": sum(
-            1 for x in excursions[train_end:validation_end]
-            if x is not None and x >= threshold
-        ),
-
-        "test_spikes": sum(
-            1 for x in excursions[validation_end:]
-            if x is not None and x >= threshold
-        )
+    conditions = {
+        "RSI <= 25": latest["rsi"] <= 25,
+        "RSI <= 30": latest["rsi"] <= 30,
+        "RSI <= 35": latest["rsi"] <= 35,
+        "EMA50 distance <= -1": latest["ema50_distance"] <= -1,
+        "EMA50 distance <= -2": latest["ema50_distance"] <= -2,
+        "Change3 <= -1 ATR": latest["change3"] <= -1,
+        "Change3 <= -2 ATR": latest["change3"] <= -2,
+        "Red candles >= 4": latest["red_count"] >= 4
     }
 
-    return summary, spikes, {
-        "patterns": final_patterns,
-        "precursor_comparison": comparison
+    matches = [
+        p for p in valid_patterns
+        if conditions.get(p["condition"], False)
+    ]
+
+    if matches:
+        return {
+            "status": "SIGNAL",
+            "matched_conditions": [
+                p["condition"] for p in matches[:3]
+            ],
+            "reason": "Conditions historiques présentes"
+        }
+
+    return {
+        "status": "NO SIGNAL",
+        "reason": "Conditions historiques absentes"
     }
 
 
-# ==========================================================
-# MAIN
-# ==========================================================
+# =====================================================
+# EXECUTION PRINCIPALE
+# =====================================================
 
 def main():
+    print("Connexion à Deriv...")
 
-    print("====================================")
-    print("SPIKE1000 V9")
-    print("BOOM1000 - 1 MINUTE")
-    print("PRECURSOR DETECTOR")
-    print("====================================")
+    candles = get_candles()
 
-    previous = load_previous()
+    print(f"{len(candles)} bougies reçues.")
 
-    output = {
-        "version": 9,
-        "symbol": SYMBOL,
-        "timeframe": "1 minute",
-        "updated_at": now(),
-        "candles": [],
-        "analysis": {},
-        "spikes": [],
-        "patterns": [],
-        "precursor_comparison": {},
-        "errors": []
+    closes, highs, lows, atr, features = calculate_indicators(candles)
+
+    total = len(candles)
+
+    train_end = int(total * 0.60)
+    validation_end = int(total * 0.80)
+
+    # Les fenêtres futures restent dans leur propre segment.
+    training_events = detect_events(
+        candles, highs, closes, atr, 50,
+        train_end - FUTURE_CANDLES
+    )
+
+    validation_events = detect_events(
+        candles, highs, closes, atr,
+        train_end,
+        validation_end - FUTURE_CANDLES
+    )
+
+    test_events = detect_events(
+        candles, highs, closes, atr,
+        validation_end,
+        total - FUTURE_CANDLES
+    )
+
+    threshold = calculate_threshold(
+        atr, 50, train_end
+    )
+
+    training_patterns = evaluate_conditions(
+        features,
+        training_events,
+        50,
+        train_end
+    )
+
+    validation_patterns = evaluate_conditions(
+        features,
+        validation_events,
+        train_end,
+        validation_end
+    )
+
+    test_patterns = evaluate_conditions(
+        features,
+        test_events,
+        validation_end,
+        total
+    )
+
+    precursor_comparison = compare_precursors(
+        features,
+        training_events,
+        50,
+        train_end
+    )
+
+    status = current_status(
+        features,
+        training_patterns
+    )
+
+    result = {
+        "version": "V10",
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "market": SYMBOL,
+        "timeframe_seconds": GRANULARITY,
+        "candles": total,
+        "threshold_method": "ATR_AUTO_X_2.5",
+        "training_threshold": round(threshold, 3),
+        "future_window_minutes": FUTURE_CANDLES,
+        "unique_events": {
+            "training": len(training_events),
+            "validation": len(validation_events),
+            "test": len(test_events)
+        },
+        "best_patterns": {
+            "training": training_patterns[:3],
+            "validation": validation_patterns[:3],
+            "test": test_patterns[:3]
+        },
+        "precursors": precursor_comparison,
+        "current": status
     }
 
-    try:
+    with open(DB_FILE, "w", encoding="utf-8") as file:
+        json.dump(result, file, indent=2, ensure_ascii=False)
 
-        print("Connexion Deriv...")
-
-        candles = get_candles()
-
-        print("Bougies :", len(candles))
-
-        print("Analyse des précurseurs...")
-
-        summary, spikes, details = analyze(candles)
-
-        output["candles"] = candles
-        output["analysis"] = summary
-        output["spikes"] = spikes
-
-        output["patterns"] = details.get(
-            "patterns", []
-        )
-
-        output["precursor_comparison"] = details.get(
-            "precursor_comparison", {}
-        )
-
-        print("Statut :", summary.get("status"))
-        print("Seuil :", summary.get("spike_threshold"))
-        print("Grandes hausses :", len(spikes))
-        print(
-            "Conditions retenues :",
-            summary.get("conditions_qualified", 0)
-        )
-
-    except Exception as e:
-
-        output["errors"].append(str(e))
-
-        output["candles"] = previous.get("candles", [])
-        output["analysis"] = previous.get("analysis", {})
-        output["spikes"] = previous.get("spikes", [])
-        output["patterns"] = previous.get("patterns", [])
-        output["precursor_comparison"] = previous.get(
-            "precursor_comparison", {}
-        )
-
-        print("ERREUR :", str(e))
-
-    save_json(output)
-
-    print("db.json sauvegardé.")
+    print("\n========== SPIKE1000 V10 ==========")
+    print("Bougies :", total)
+    print("Événements uniques :", len(training_events) +
+          len(validation_events) + len(test_events))
+    print("Training :", len(training_events))
+    print("Validation :", len(validation_events))
+    print("Test :", len(test_events))
+    print("Seuil automatique :", round(threshold, 3))
+    print("Statut actuel :", status["status"])
+    print("Fichier db.json mis à jour.")
+    print("===================================")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as error:
+        print("ERREUR :", str(error))
+        raise
+
+2. Vérifie "requirements.txt"
+
+Il doit contenir :
+
+websocket-client
+
+3. Ne modifie pas ton workflow GitHub Actions
+
+Garde ton workflow actuel s'il installe déjà "requirements.txt" et lance :
+
+python spike.py
+
+4. Résultat attendu
+
+Le fichier "db.json" contiendra seulement les informations principales :
+
+- Nombre d'événements uniques détectés.
+- Événements en entraînement, validation et test.
+- Trois meilleures conditions.
+- Comparaison des précurseurs.
+- État actuel : "SIGNAL", "WAIT" ou "NO SIGNAL".
+
+Attention : "SIGNAL" signifie que des conditions historiques sont présentes, pas qu'une hausse est garantie. La validation et le test permettront de voir si ces conditions se reproduisent réellement.
+
+Lance maintenant GitHub Actions et envoie-moi le résultat de "db.json". Je pourrai vérifier si V10 détecte de vrais événements ou s'il faut encore corriger son analyse.
