@@ -1,8 +1,7 @@
 import os
-import sys
 import json
 import time
-import statistics
+import itertools
 import websocket
 
 from pathlib import Path
@@ -10,10 +9,10 @@ from datetime import datetime, timezone
 
 
 # ============================================================
-# CONFIGURATION
+# SPIKE1000 V6 - MULTI INDICATOR ENGINE
 # ============================================================
 
-VERSION = 5
+VERSION = 6
 
 SYMBOL = os.getenv("DERIV_SYMBOL", "BOOM1000")
 
@@ -22,13 +21,17 @@ COLLECT_SECONDS = int(os.getenv("COLLECT_SECONDS", "180"))
 FUTURE_TICKS = int(os.getenv("FUTURE_TICKS", "20"))
 
 MAX_TICKS = 100000
-TRAIN_RATIO = 0.70
-MIN_PATTERN_OBSERVATIONS = 20
-MIN_PATTERN_PROBABILITY = 0.10
 
 WS_URL = "wss://api.derivws.com/trading/v1/options/ws/public"
 
 DB_FILE = Path(__file__).resolve().parent / "db.json"
+
+MIN_TRAIN_SIGNALS = 15
+MIN_TEST_SIGNALS = 20
+
+TARGET_PRECISION = 0.80
+
+MAX_COMBINATIONS = 15000
 
 
 # ============================================================
@@ -59,12 +62,11 @@ def empty_db():
 
 def load_db():
     if not DB_FILE.exists():
-        print("Nouvelle base de données.")
         return empty_db()
 
     try:
-        with open(DB_FILE, "r", encoding="utf-8") as file:
-            db = json.load(file)
+        with open(DB_FILE, "r", encoding="utf-8") as f:
+            db = json.load(f)
 
         if not isinstance(db, dict):
             return empty_db()
@@ -75,14 +77,15 @@ def load_db():
             if key not in db:
                 db[key] = value
 
-        if not isinstance(db["ticks"], list):
-            db["ticks"] = []
+        for key in ("ticks", "spikes", "errors"):
+            if not isinstance(db[key], list):
+                db[key] = []
 
-        if not isinstance(db["spikes"], list):
-            db["spikes"] = []
+        if not isinstance(db["analysis"], dict):
+            db["analysis"] = {}
 
-        if not isinstance(db["errors"], list):
-            db["errors"] = []
+        if not isinstance(db["prediction"], dict):
+            db["prediction"] = {}
 
         db["version"] = VERSION
         db["symbol"] = SYMBOL
@@ -90,43 +93,43 @@ def load_db():
         return db
 
     except Exception as error:
-        print("Erreur lecture DB:", error)
+        print("Erreur DB:", error)
         return empty_db()
 
 
 def save_db(db):
     db["updated_at"] = now_iso()
 
-    temp_file = DB_FILE.with_suffix(".tmp")
+    temp = DB_FILE.with_suffix(".tmp")
 
-    with open(temp_file, "w", encoding="utf-8") as file:
-        json.dump(db, file, indent=2, ensure_ascii=False)
-        file.flush()
-        os.fsync(file.fileno())
+    with open(temp, "w", encoding="utf-8") as f:
+        json.dump(db, f, indent=2, ensure_ascii=False)
+        f.flush()
+        os.fsync(f.fileno())
 
-    os.replace(temp_file, DB_FILE)
+    os.replace(temp, DB_FILE)
 
-    print("Base sauvegardée.")
-    print("Ticks enregistrés:", len(db["ticks"]))
+    print("DB sauvegardée.")
+    print("Nombre de ticks:", len(db["ticks"]))
 
 
-def record_error(db, message):
+def record_error(db, error):
     db["errors"].append({
         "time": now_iso(),
-        "message": str(message)
+        "message": str(error)
     })
 
-    db["errors"] = db["errors"][-100:]
+    db["errors"] = db["errors"][-50:]
 
 
 # ============================================================
-# CONNEXION DERIV
+# DERIV CONNECTION
 # ============================================================
 
 def connect_deriv():
     delays = [5, 10, 20, 30, 60]
 
-    for attempt, delay in enumerate(delays, start=1):
+    for attempt, delay in enumerate(delays, 1):
         try:
             print("Connexion Deriv:", attempt)
 
@@ -139,66 +142,53 @@ def connect_deriv():
             return ws
 
         except Exception as error:
-            print("Connexion échouée:", error)
+            print("Connexion impossible:", error)
 
             if attempt < len(delays):
                 time.sleep(delay)
 
-    raise RuntimeError("Impossible de se connecter à Deriv.")
-
-
-def receive_message(ws, timeout=30):
-    ws.settimeout(timeout)
-
-    while True:
-        raw = ws.recv()
-        data = json.loads(raw)
-
-        if "error" in data:
-            raise RuntimeError(data["error"].get("message", "Erreur Deriv"))
-
-        return data
+    raise RuntimeError("Connexion Deriv impossible")
 
 
 # ============================================================
-# HISTORIQUE
+# HISTORICAL DATA
 # ============================================================
 
 def collect_history():
-    print("\nCollecte historique:", SYMBOL)
+    print("\nCollecte historique...")
 
     ws = connect_deriv()
 
     try:
-        request = {
+        ws.send(json.dumps({
             "ticks_history": SYMBOL,
             "count": HISTORY_COUNT,
             "end": "latest",
             "style": "ticks",
             "req_id": 1001
-        }
-
-        ws.send(json.dumps(request))
+        }))
 
         while True:
-            data = receive_message(ws)
+            data = json.loads(ws.recv())
+
+            if "error" in data:
+                raise RuntimeError(data["error"])
 
             history = data.get("history")
 
             if history:
-                prices = history.get("prices", [])
-                times = history.get("times", [])
-
                 rows = []
 
-                for epoch, price in zip(times, prices):
+                for epoch, price in zip(
+                    history["times"],
+                    history["prices"]
+                ):
                     rows.append({
                         "epoch": int(epoch),
-                        "price": float(price),
-                        "source": "history"
+                        "price": float(price)
                     })
 
-                print("Ticks historiques reçus:", len(rows))
+                print("Historique:", len(rows))
                 return rows
 
     finally:
@@ -206,11 +196,11 @@ def collect_history():
 
 
 # ============================================================
-# COLLECTE EN DIRECT
+# LIVE DATA
 # ============================================================
 
 def collect_live():
-    print("\nCollecte en direct:", COLLECT_SECONDS, "secondes")
+    print("\nCollecte live:", COLLECT_SECONDS, "secondes")
 
     ws = connect_deriv()
 
@@ -218,59 +208,45 @@ def collect_live():
     start = time.time()
 
     try:
-        request = {
+        ws.send(json.dumps({
             "ticks": SYMBOL,
             "subscribe": 1,
             "req_id": 2001
-        }
+        }))
 
-        ws.send(json.dumps(request))
         ws.settimeout(10)
 
         while time.time() - start < COLLECT_SECONDS:
             try:
-                raw = ws.recv()
-                data = json.loads(raw)
+                data = json.loads(ws.recv())
 
                 if "error" in data:
-                    raise RuntimeError(
-                        data["error"].get("message", "Erreur Deriv")
-                    )
+                    raise RuntimeError(data["error"])
 
                 tick = data.get("tick")
 
                 if tick:
                     rows.append({
                         "epoch": int(tick["epoch"]),
-                        "price": float(tick["quote"]),
-                        "source": "live"
+                        "price": float(tick["quote"])
                     })
-
-                    print(
-                        "Tick:",
-                        tick["epoch"],
-                        tick["quote"]
-                    )
 
             except websocket.WebSocketTimeoutException:
                 continue
 
-        print("Ticks live reçus:", len(rows))
-
     except Exception as error:
-        print("Collecte live interrompue:", error)
+        print("Erreur live:", error)
 
     finally:
-        try:
-            ws.close()
-        except Exception:
-            pass
+        ws.close()
+
+    print("Ticks live:", len(rows))
 
     return rows
 
 
 # ============================================================
-# FUSION DES DONNÉES
+# MERGE TICKS
 # ============================================================
 
 def merge_ticks(db, new_rows):
@@ -281,455 +257,661 @@ def merge_ticks(db, new_rows):
             epoch = int(row["epoch"])
             price = float(row["price"])
 
-            key = (epoch, price)
-
-            combined[key] = {
+            combined[(epoch, price)] = {
                 "epoch": epoch,
                 "price": price
             }
 
-        except (KeyError, TypeError, ValueError):
+        except (KeyError, ValueError, TypeError):
             continue
 
-    result = sorted(
+    db["ticks"] = sorted(
         combined.values(),
-        key=lambda item: item["epoch"]
-    )
-
-    db["ticks"] = result[-MAX_TICKS:]
+        key=lambda x: x["epoch"]
+    )[-MAX_TICKS:]
 
     return db["ticks"]
 
 
 # ============================================================
-# CALCULS STATISTIQUES
+# EMA
+# ============================================================
+
+def calculate_ema(prices, period):
+    result = [None] * len(prices)
+
+    if len(prices) < period:
+        return result
+
+    multiplier = 2 / (period + 1)
+
+    ema = sum(prices[:period]) / period
+
+    result[period - 1] = ema
+
+    for i in range(period, len(prices)):
+        ema = (
+            prices[i] * multiplier
+            + ema * (1 - multiplier)
+        )
+
+        result[i] = ema
+
+    return result
+
+
+# ============================================================
+# RSI - WILDER
+# ============================================================
+
+def calculate_rsi(prices, period):
+    result = [None] * len(prices)
+
+    if len(prices) <= period:
+        return result
+
+    gains = []
+    losses = []
+
+    for i in range(1, period + 1):
+        change = prices[i] - prices[i - 1]
+
+        gains.append(max(change, 0))
+        losses.append(max(-change, 0))
+
+    avg_gain = sum(gains) / period
+    avg_loss = sum(losses) / period
+
+    def rsi_value(gain, loss):
+        if loss == 0:
+            return 100.0 if gain > 0 else 50.0
+
+        rs = gain / loss
+
+        return 100 - (100 / (1 + rs))
+
+    result[period] = rsi_value(
+        avg_gain,
+        avg_loss
+    )
+
+    for i in range(period + 1, len(prices)):
+        change = prices[i] - prices[i - 1]
+
+        gain = max(change, 0)
+        loss = max(-change, 0)
+
+        avg_gain = (
+            avg_gain * (period - 1) + gain
+        ) / period
+
+        avg_loss = (
+            avg_loss * (period - 1) + loss
+        ) / period
+
+        result[i] = rsi_value(
+            avg_gain,
+            avg_loss
+        )
+
+    return result
+
+
+# ============================================================
+# STOCHASTIC
+# ============================================================
+
+def calculate_stochastic(prices, k_period, d_period):
+    k_values = [None] * len(prices)
+    d_values = [None] * len(prices)
+
+    for i in range(k_period - 1, len(prices)):
+        window = prices[i - k_period + 1:i + 1]
+
+        lowest = min(window)
+        highest = max(window)
+
+        if highest == lowest:
+            k_values[i] = 50.0
+        else:
+            k_values[i] = (
+                (prices[i] - lowest)
+                / (highest - lowest)
+            ) * 100
+
+    for i in range(len(prices)):
+        if i < k_period + d_period - 2:
+            continue
+
+        window = k_values[i - d_period + 1:i + 1]
+
+        if all(value is not None for value in window):
+            d_values[i] = sum(window) / d_period
+
+    return k_values, d_values
+
+
+# ============================================================
+# PERCENTILE
 # ============================================================
 
 def percentile(values, percentage):
-    if not values:
-        return 0.0
-
     values = sorted(values)
+
+    if not values:
+        return 0
 
     position = (len(values) - 1) * percentage / 100
 
-    lower = int(position)
-    upper = min(lower + 1, len(values) - 1)
+    low = int(position)
+    high = min(low + 1, len(values) - 1)
 
-    fraction = position - lower
+    fraction = position - low
 
     return (
-        values[lower] * (1 - fraction)
-        + values[upper] * fraction
+        values[low] * (1 - fraction)
+        + values[high] * fraction
     )
 
 
+# ============================================================
+# SPIKE DETECTION
+# ============================================================
+
 def calculate_returns(prices):
-    returns = []
+    result = [0.0]
 
     for i in range(1, len(prices)):
         previous = prices[i - 1]
-        current = prices[i]
 
         if previous <= 0:
-            returns.append(0.0)
+            result.append(0.0)
         else:
-            returns.append((current - previous) / previous)
+            result.append(
+                (prices[i] - previous) / previous
+            )
 
-    return returns
+    return result
 
 
 # ============================================================
-# CONFIGURATIONS AVANT SPIKE
+# INDICATOR CACHE
 # ============================================================
 
-def get_features(returns, index, threshold):
-    windows = [1, 3, 5, 10, 30]
+def build_indicators(prices):
+    print("\nCalcul des indicateurs...")
 
-    features = []
+    cache = {
+        "rsi": {},
+        "ema": {},
+        "stochastic": {}
+    }
 
-    for window in windows:
-        start = max(0, index - window)
+    rsi_periods = [5, 6, 7, 9, 14, 21]
 
-        previous_returns = returns[start:index]
+    ema_periods = [
+        3, 5, 8, 10, 12, 15, 20,
+        25, 30, 40, 50, 60, 80, 100
+    ]
 
-        if not previous_returns:
-            features.append(0)
-            continue
+    stochastic_periods = [5, 7, 9, 14]
 
-        maximum = max(
-            [max(0.0, value) for value in previous_returns]
+    for period in rsi_periods:
+        cache["rsi"][period] = calculate_rsi(
+            prices,
+            period
         )
 
-        if threshold <= 0:
-            ratio = 0
-        else:
-            ratio = maximum / threshold
+    for period in ema_periods:
+        cache["ema"][period] = calculate_ema(
+            prices,
+            period
+        )
 
-        if ratio < 0.10:
-            category = 0
-        elif ratio < 0.25:
-            category = 1
-        elif ratio < 0.50:
-            category = 2
-        elif ratio < 1.00:
-            category = 3
-        else:
-            category = 4
+    for period in stochastic_periods:
+        for d_period in [3, 5]:
+            cache["stochastic"][(period, d_period)] = (
+                calculate_stochastic(
+                    prices,
+                    period,
+                    d_period
+                )
+            )
 
-        features.append(category)
-
-    return tuple(features)
+    return cache
 
 
 # ============================================================
-# APPRENTISSAGE ET TEST
+# COMBINATION GENERATOR
+# ============================================================
+
+def generate_combinations():
+    combinations = []
+
+    rsi_periods = [5, 6, 7, 9, 14, 21]
+    rsi_levels = [20, 25, 30, 35, 40, 45]
+
+    ema_fast = [3, 5, 8, 10, 12, 15, 20]
+    ema_slow = [20, 25, 30, 40, 50, 60, 80, 100]
+
+    stochastic_periods = [5, 7, 9, 14]
+    stochastic_d = [3, 5]
+
+    stochastic_levels = [10, 15, 20, 25, 30]
+
+    for values in itertools.product(
+        rsi_periods,
+        rsi_levels,
+        ema_fast,
+        ema_slow,
+        stochastic_periods,
+        stochastic_d,
+        stochastic_levels
+    ):
+        (
+            rp,
+            rl,
+            ef,
+            es,
+            sk,
+            sd,
+            sl
+        ) = values
+
+        if ef >= es:
+            continue
+
+        combinations.append({
+            "rsi_period": rp,
+            "rsi_level": rl,
+            "ema_fast": ef,
+            "ema_slow": es,
+            "stochastic_k": sk,
+            "stochastic_d": sd,
+            "stochastic_level": sl
+        })
+
+        if len(combinations) >= MAX_COMBINATIONS:
+            break
+
+    return combinations
+
+
+# ============================================================
+# SIGNAL ENGINE
+# ============================================================
+
+def check_signal(config, indicators, index):
+    rp = config["rsi_period"]
+    rl = config["rsi_level"]
+
+    ef = config["ema_fast"]
+    es = config["ema_slow"]
+
+    sk = config["stochastic_k"]
+    sd = config["stochastic_d"]
+    sl = config["stochastic_level"]
+
+    rsi = indicators["rsi"][rp]
+
+    fast = indicators["ema"][ef]
+    slow = indicators["ema"][es]
+
+    k, d = indicators["stochastic"][(sk, sd)]
+
+    if index < 1:
+        return False
+
+    if any(x[index] is None for x in [
+        rsi, fast, slow, k, d
+    ]):
+        return False
+
+    if any(x[index - 1] is None for x in [
+        rsi, k, d
+    ]):
+        return False
+
+    # RSI remonte depuis sa zone basse.
+
+    rsi_condition = (
+        rsi[index] >= rsi[index - 1]
+        and rsi[index - 1] <= rl
+    )
+
+    # Stochastic croise à la hausse en zone basse.
+
+    stochastic_condition = (
+        k[index] > d[index]
+        and k[index - 1] <= d[index - 1]
+        and k[index - 1] <= sl
+    )
+
+    # Tendance EMA haussière.
+
+    ema_condition = (
+        fast[index] > slow[index]
+    )
+
+    return (
+        rsi_condition
+        and stochastic_condition
+        and ema_condition
+    )
+
+
+# ============================================================
+# BACKTEST
+# ============================================================
+
+def evaluate_combination(
+    config,
+    indicators,
+    spike_flags,
+    start,
+    end
+):
+    signals = 0
+    hits = 0
+
+    for index in range(start, end - FUTURE_TICKS):
+        if not check_signal(
+            config,
+            indicators,
+            index
+        ):
+            continue
+
+        signals += 1
+
+        future = spike_flags[
+            index + 1:index + FUTURE_TICKS + 1
+        ]
+
+        if any(future):
+            hits += 1
+
+    probability = (
+        hits / signals
+        if signals else 0
+    )
+
+    return {
+        "signals": signals,
+        "hits": hits,
+        "probability": probability
+    }
+
+
+# ============================================================
+# ANALYSIS ENGINE
 # ============================================================
 
 def analyze_data(db):
     ticks = db["ticks"]
 
-    if len(ticks) < 100:
-        print("Pas assez de données pour analyser.")
+    print("\n========== ANALYSE V6 ==========")
+
+    if len(ticks) < 1000:
         db["analysis"] = {
             "status": "insufficient_data",
-            "total_ticks": len(ticks)
+            "total_ticks": len(ticks),
+            "minimum_required": 1000
         }
+
+        db["prediction"] = {
+            "status": "waiting_for_data"
+        }
+
+        print("Minimum 1000 ticks requis.")
         return
 
-    prices = [float(tick["price"]) for tick in ticks]
-    epochs = [int(tick["epoch"]) for tick in ticks]
+    prices = [float(x["price"]) for x in ticks]
 
     returns = calculate_returns(prices)
 
-    if len(returns) < 100:
-        return
+    # Split chronologique :
+    # 60 % apprentissage
+    # 20 % validation
+    # 20 % test indépendant
 
-    # --------------------------------------------------------
-    # Séparation chronologique
-    # --------------------------------------------------------
+    n = len(prices)
 
-    split_index = int(len(returns) * TRAIN_RATIO)
+    train_end = int(n * 0.60)
+    validation_end = int(n * 0.80)
 
-    training_returns = returns[:split_index]
-
-    positive_training_returns = [
-        value for value in training_returns
-        if value > 0
+    positive_returns = [
+        returns[i]
+        for i in range(1, train_end)
+        if returns[i] > 0
     ]
 
-    if len(positive_training_returns) < 10:
-        print("Pas assez de mouvements positifs.")
+    if len(positive_returns) < 20:
+        db["analysis"] = {
+            "status": "insufficient_positive_returns",
+            "total_ticks": n
+        }
         return
 
-    # Le seuil est appris uniquement sur la période
-    # d'entraînement. Il ne regarde pas les données futures.
-
     spike_threshold = percentile(
-        positive_training_returns,
+        positive_returns,
         99.5
     )
 
-    if spike_threshold <= 0:
-        return
-
-    # --------------------------------------------------------
-    # Détection des spikes avec seuil fixe
-    # --------------------------------------------------------
-
-    spike_indices = [
-        index
-        for index, value in enumerate(returns)
-        if value >= spike_threshold
+    spike_flags = [
+        value >= spike_threshold
+        for value in returns
     ]
 
     db["spikes"] = [
         {
-            "epoch": epochs[index + 1],
-            "variation": returns[index],
-            "price_before": prices[index],
-            "price_after": prices[index + 1]
+            "epoch": ticks[i]["epoch"],
+            "price": prices[i],
+            "variation": returns[i]
         }
-        for index in spike_indices
+        for i in range(1, len(returns))
+        if spike_flags[i]
     ]
 
-    # --------------------------------------------------------
-    # Construction des échantillons
-    # --------------------------------------------------------
+    indicators = build_indicators(prices)
 
-    samples = []
+    combinations = generate_combinations()
 
-    for index in range(30, len(returns) - FUTURE_TICKS):
-        features = get_features(
-            returns,
-            index,
-            spike_threshold
+    print("Ticks:", n)
+    print("Combinaisons:", len(combinations))
+    print("Seuil spike:", spike_threshold)
+
+    # Recherche sur entraînement.
+
+    training_results = []
+
+    for config in combinations:
+        result = evaluate_combination(
+            config,
+            indicators,
+            spike_flags,
+            100,
+            train_end
         )
 
-        future_end = index + FUTURE_TICKS
+        if result["signals"] < MIN_TRAIN_SIGNALS:
+            continue
 
-        target = any(
-            index <= spike_index < future_end
-            for spike_index in spike_indices
-        )
-
-        samples.append({
-            "index": index,
-            "epoch": epochs[index],
-            "features": features,
-            "target": int(target)
+        training_results.append({
+            "config": config,
+            **result
         })
 
-    if len(samples) < 50:
-        print("Pas assez d'échantillons.")
-        return
+    # Validation : choisir les meilleures configurations.
 
-    # --------------------------------------------------------
-    # Séparation apprentissage / test
-    # --------------------------------------------------------
-
-    sample_split = int(len(samples) * TRAIN_RATIO)
-
-    training_samples = samples[:sample_split]
-    testing_samples = samples[sample_split:]
-
-    # --------------------------------------------------------
-    # Apprentissage des configurations
-    # --------------------------------------------------------
-
-    patterns = {}
-
-    for sample in training_samples:
-        key = str(list(sample["features"]))
-
-        if key not in patterns:
-            patterns[key] = {
-                "observations": 0,
-                "spikes": 0
-            }
-
-        patterns[key]["observations"] += 1
-        patterns[key]["spikes"] += sample["target"]
-
-    for pattern in patterns.values():
-        observations = pattern["observations"]
-        spikes = pattern["spikes"]
-
-        pattern["probability"] = (
-            spikes / observations
-            if observations else 0
-        )
-
-    # --------------------------------------------------------
-    # Évaluation sur données inconnues
-    # --------------------------------------------------------
-
-    true_positive = 0
-    false_positive = 0
-    false_negative = 0
-    true_negative = 0
-
-    for sample in testing_samples:
-        key = str(list(sample["features"]))
-
-        pattern = patterns.get(key)
-
-        prediction = False
-
-        if pattern:
-            if (
-                pattern["observations"]
-                >= MIN_PATTERN_OBSERVATIONS
-                and pattern["probability"]
-                >= MIN_PATTERN_PROBABILITY
-            ):
-                prediction = True
-
-        actual = bool(sample["target"])
-
-        if prediction and actual:
-            true_positive += 1
-
-        elif prediction and not actual:
-            false_positive += 1
-
-        elif not prediction and actual:
-            false_negative += 1
-
-        else:
-            true_negative += 1
-
-    total_test = len(testing_samples)
-
-    accuracy = (
-        (true_positive + true_negative) / total_test
-        if total_test else 0
-    )
-
-    precision = (
-        true_positive / (true_positive + false_positive)
-        if true_positive + false_positive else 0
-    )
-
-    recall = (
-        true_positive / (true_positive + false_negative)
-        if true_positive + false_negative else 0
-    )
-
-    false_positive_rate = (
-        false_positive / (false_positive + true_negative)
-        if false_positive + true_negative else 0
-    )
-
-    # --------------------------------------------------------
-    # Classement des configurations
-    # --------------------------------------------------------
-
-    top_patterns = []
-
-    for configuration, values in patterns.items():
-        top_patterns.append({
-            "configuration": json.loads(configuration),
-            "observations": values["observations"],
-            "spikes": values["spikes"],
-            "probability": round(
-                values["probability"],
-                6
-            )
-        })
-
-    top_patterns.sort(
-        key=lambda item: (
-            item["probability"],
-            item["observations"]
+    training_results.sort(
+        key=lambda x: (
+            x["probability"],
+            x["signals"]
         ),
         reverse=True
     )
 
-    # --------------------------------------------------------
-    # Analyse de la configuration actuelle
-    # --------------------------------------------------------
+    candidates = training_results[:100]
 
-    current_features = get_features(
-        returns,
-        len(returns),
-        spike_threshold
+    validation_results = []
+
+    for item in candidates:
+        result = evaluate_combination(
+            item["config"],
+            indicators,
+            spike_flags,
+            train_end,
+            validation_end
+        )
+
+        if result["signals"] < 5:
+            continue
+
+        validation_results.append({
+            "config": item["config"],
+            **result
+        })
+
+    validation_results.sort(
+        key=lambda x: (
+            x["probability"],
+            x["signals"]
+        ),
+        reverse=True
     )
 
-    current_key = str(list(current_features))
+    # Test final : seules les configurations choisies
+    # sur les données antérieures sont évaluées ici.
 
-    current_pattern = patterns.get(current_key)
+    final_results = []
 
-    if current_pattern:
-        current_probability = current_pattern["probability"]
-        current_observations = current_pattern["observations"]
-    else:
-        current_probability = 0
-        current_observations = 0
+    for item in validation_results[:20]:
+        result = evaluate_combination(
+            item["config"],
+            indicators,
+            spike_flags,
+            validation_end,
+            n - FUTURE_TICKS
+        )
 
-    if (
-        current_observations >= MIN_PATTERN_OBSERVATIONS
-        and current_probability >= MIN_PATTERN_PROBABILITY
-    ):
-        signal = "CONFIGURATION A SURVEILLER"
-    else:
-        signal = "AUCUN SIGNAL FORT"
+        if result["signals"] < MIN_TEST_SIGNALS:
+            continue
 
-    # --------------------------------------------------------
-    # Résultats
-    # --------------------------------------------------------
+        final_results.append({
+            "config": item["config"],
+            **result
+        })
 
-    training_spikes = sum(
-        sample["target"]
-        for sample in training_samples
+    final_results.sort(
+        key=lambda x: (
+            x["probability"],
+            x["signals"]
+        ),
+        reverse=True
     )
 
-    testing_spikes = sum(
-        sample["target"]
-        for sample in testing_samples
-    )
+    best = []
+
+    for item in final_results[:10]:
+        c = item["config"]
+
+        best.append({
+            "rsi": f"RSI {c['rsi_period']}",
+            "rsi_level": c["rsi_level"],
+            "ema": (
+                f"EMA {c['ema_fast']}/"
+                f"{c['ema_slow']}"
+            ),
+            "stochastic": (
+                f"{c['stochastic_k']}/"
+                f"{c['stochastic_d']}"
+            ),
+            "stochastic_level": c["stochastic_level"],
+            "signals_tested": item["signals"],
+            "spikes_detected": item["hits"],
+            "spike_probability": round(
+                item["probability"],
+                4
+            )
+        })
 
     db["analysis"] = {
         "status": "completed",
         "version": VERSION,
-        "total_ticks": len(ticks),
-        "total_samples": len(samples),
-
-        "training_samples": len(training_samples),
-        "testing_samples": len(testing_samples),
-
-        "training_spikes": training_spikes,
-        "testing_spikes": testing_spikes,
-        "total_spikes_detected": len(spike_indices),
-
+        "total_ticks": n,
+        "combinations_tested": len(combinations),
+        "combinations_qualified": len(training_results),
         "spike_threshold": spike_threshold,
-
-        "true_positive": true_positive,
-        "false_positive": false_positive,
-        "false_negative": false_negative,
-        "true_negative": true_negative,
-
-        "accuracy": round(accuracy, 6),
-        "precision": round(precision, 6),
-        "recall": round(recall, 6),
-        "false_positive_rate": round(
-            false_positive_rate,
-            6
-        ),
-
-        "data_start_epoch": epochs[0],
-        "data_end_epoch": epochs[-1],
-
-        "top_patterns": top_patterns[:20],
-
+        "total_spikes": len(db["spikes"]),
+        "training_ticks": train_end,
+        "validation_ticks": validation_end - train_end,
+        "test_ticks": n - validation_end,
+        "best_configurations": best,
+        "target_probability": TARGET_PRECISION,
         "note": (
-            "Analyse statistique expérimentale. "
-            "Le seuil est appris sur les données "
-            "d'entraînement. Aucun résultat ne garantit "
-            "les mouvements futurs."
+            "Probabilités historiques expérimentales. "
+            "Aucune garantie de spike futur."
         )
     }
 
-    db["prediction"] = {
-        "updated_at": now_iso(),
-        "result": {
-            "configuration": list(current_features),
-            "observations": current_observations,
-            "historical_probability": round(
-                current_probability,
-                6
-            ),
-            "signal": signal
-        }
-    }
+    if best:
+        best_config = best[0]
 
-    print("\n========== ANALYSE SPIKE1000 ==========")
-    print("Ticks:", len(ticks))
-    print("Spikes détectés:", len(spike_indices))
-    print("Spikes apprentissage:", training_spikes)
-    print("Spikes test:", testing_spikes)
-    print("Précision:", round(precision * 100, 2), "%")
-    print("Rappel:", round(recall * 100, 2), "%")
-    print("Exactitude:", round(accuracy * 100, 2), "%")
-    print("Signal:", signal)
-    print("=======================================")
+        db["prediction"] = {
+            "updated_at": now_iso(),
+            "signal": (
+                "CONFIGURATION HISTORIQUEMENT FAVORABLE"
+                if best_config["spike_probability"] >= TARGET_PRECISION
+                else "AUCUNE CONFIGURATION A 80%"
+            ),
+            "best_configuration": best_config
+        }
+
+    else:
+        db["prediction"] = {
+            "updated_at": now_iso(),
+            "signal": "DONNEES INSUFFISANTES POUR VALIDER",
+            "best_configuration": None
+        }
+
+    print("\n========== RESULTATS ==========")
+    print("Combinaisons testées:", len(combinations))
+    print("Combinaisons qualifiées:", len(training_results))
+    print("Spikes:", len(db["spikes"]))
+
+    if best:
+        for i, item in enumerate(best[:5], 1):
+            print(
+                i,
+                item["rsi"],
+                "EMA:", item["ema"],
+                "STO:", item["stochastic"],
+                "Probabilité:",
+                item["spike_probability"] * 100,
+                "%",
+                "Signaux:",
+                item["signals_tested"]
+            )
+    else:
+        print("Aucune configuration validée.")
+
+    print("================================")
 
 
 # ============================================================
-# PROGRAMME PRINCIPAL
+# MAIN
 # ============================================================
 
 def main():
     print("\n===================================")
-    print("       SPIKE1000 ENGINE V5")
+    print("       SPIKE1000 ENGINE V6")
+    print("       MULTI INDICATOR")
     print("===================================")
 
     db = load_db()
 
-    print("Symbole:", SYMBOL)
     print("Ticks existants:", len(db["ticks"]))
-
-    # 1. Collecte historique
 
     try:
         history = collect_history()
@@ -739,9 +921,6 @@ def main():
     except Exception as error:
         print("Erreur historique:", error)
         record_error(db, error)
-        save_db(db)
-
-    # 2. Collecte en direct
 
     try:
         live = collect_live()
@@ -751,9 +930,6 @@ def main():
     except Exception as error:
         print("Erreur live:", error)
         record_error(db, error)
-        save_db(db)
-
-    # 3. Analyse statistique
 
     try:
         analyze_data(db)
@@ -762,12 +938,19 @@ def main():
         print("Erreur analyse:", error)
         record_error(db, error)
 
-    # 4. Sauvegarde finale
+        db["analysis"] = {
+            "status": "error",
+            "message": str(error)
+        }
+
+        db["prediction"] = {
+            "signal": "ANALYSE IMPOSSIBLE"
+        }
 
     save_db(db)
 
-    print("\nSPIKE1000 terminé.")
-    print("Mode: lecture seule.")
+    print("\nSPIKE1000 V6 terminé.")
+    print("Lecture seule.")
     print("Aucun trade exécuté.")
 
 
