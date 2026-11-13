@@ -1,57 +1,33 @@
-import os
-import json
-import time
-import itertools
-import websocket
+#!/usr/bin/env python3
+# SPIKE1000 V7
+# Analyse BOOM1000 en lecture seule.
+# Aucun trade, achat ou vente.
 
-from pathlib import Path
+import json
+import math
+import os
+import time
 from datetime import datetime, timezone
 
+import websocket
 
-# ============================================================
-# SPIKE1000 V6 - MULTI INDICATOR ENGINE
-# ============================================================
-
-VERSION = 6
-
-SYMBOL = os.getenv("DERIV_SYMBOL", "BOOM1000")
-
-HISTORY_COUNT = int(os.getenv("HISTORY_COUNT", "5000"))
-COLLECT_SECONDS = int(os.getenv("COLLECT_SECONDS", "180"))
-FUTURE_TICKS = int(os.getenv("FUTURE_TICKS", "20"))
-
-MAX_TICKS = 100000
-
+VERSION = 7
+SYMBOL = "BOOM1000"
 WS_URL = "wss://api.derivws.com/trading/v1/options/ws/public"
 
-DB_FILE = Path(__file__).resolve().parent / "db.json"
-
-MIN_TRAIN_SIGNALS = 15
-MIN_TEST_SIGNALS = 20
-
-TARGET_PRECISION = 0.80
-
-MAX_COMBINATIONS = 15000
+DB_FILE = "db.json"
+HISTORY_COUNT = 5000
+COLLECT_SECONDS = 180
+FUTURE_TICKS = 20
+MAX_STORED_TICKS = 30000
 
 
-# ============================================================
-# DATE
-# ============================================================
-
-def now_iso():
+def now():
     return datetime.now(timezone.utc).isoformat()
 
 
-# ============================================================
-# DATABASE
-# ============================================================
-
 def empty_db():
     return {
-        "version": VERSION,
-        "symbol": SYMBOL,
-        "created_at": now_iso(),
-        "updated_at": now_iso(),
         "ticks": [],
         "spikes": [],
         "analysis": {},
@@ -61,7 +37,7 @@ def empty_db():
 
 
 def load_db():
-    if not DB_FILE.exists():
+    if not os.path.exists(DB_FILE):
         return empty_db()
 
     try:
@@ -71,240 +47,189 @@ def load_db():
         if not isinstance(db, dict):
             return empty_db()
 
-        defaults = empty_db()
-
-        for key, value in defaults.items():
-            if key not in db:
-                db[key] = value
-
-        for key in ("ticks", "spikes", "errors"):
-            if not isinstance(db[key], list):
-                db[key] = []
-
-        if not isinstance(db["analysis"], dict):
-            db["analysis"] = {}
-
-        if not isinstance(db["prediction"], dict):
-            db["prediction"] = {}
-
-        db["version"] = VERSION
-        db["symbol"] = SYMBOL
+        db.setdefault("ticks", [])
+        db.setdefault("spikes", [])
+        db.setdefault("analysis", {})
+        db.setdefault("prediction", {})
+        db.setdefault("errors", [])
 
         return db
 
-    except Exception as error:
-        print("Erreur DB:", error)
+    except Exception as e:
+        print("Erreur lecture DB:", e)
         return empty_db()
 
 
 def save_db(db):
-    db["updated_at"] = now_iso()
-
-    temp = DB_FILE.with_suffix(".tmp")
+    temp = DB_FILE + ".tmp"
 
     with open(temp, "w", encoding="utf-8") as f:
         json.dump(db, f, indent=2, ensure_ascii=False)
-        f.flush()
-        os.fsync(f.fileno())
 
     os.replace(temp, DB_FILE)
 
-    print("DB sauvegardée.")
-    print("Nombre de ticks:", len(db["ticks"]))
 
+def clean_ticks(rows):
+    unique = {}
 
-def record_error(db, error):
-    db["errors"].append({
-        "time": now_iso(),
-        "message": str(error)
-    })
-
-    db["errors"] = db["errors"][-50:]
-
-
-# ============================================================
-# DERIV CONNECTION
-# ============================================================
-
-def connect_deriv():
-    delays = [5, 10, 20, 30, 60]
-
-    for attempt, delay in enumerate(delays, 1):
-        try:
-            print("Connexion Deriv:", attempt)
-
-            ws = websocket.create_connection(
-                WS_URL,
-                timeout=30
-            )
-
-            print("Connexion réussie.")
-            return ws
-
-        except Exception as error:
-            print("Connexion impossible:", error)
-
-            if attempt < len(delays):
-                time.sleep(delay)
-
-    raise RuntimeError("Connexion Deriv impossible")
-
-
-# ============================================================
-# HISTORICAL DATA
-# ============================================================
-
-def collect_history():
-    print("\nCollecte historique...")
-
-    ws = connect_deriv()
-
-    try:
-        ws.send(json.dumps({
-            "ticks_history": SYMBOL,
-            "count": HISTORY_COUNT,
-            "end": "latest",
-            "style": "ticks",
-            "req_id": 1001
-        }))
-
-        while True:
-            data = json.loads(ws.recv())
-
-            if "error" in data:
-                raise RuntimeError(data["error"])
-
-            history = data.get("history")
-
-            if history:
-                rows = []
-
-                for epoch, price in zip(
-                    history["times"],
-                    history["prices"]
-                ):
-                    rows.append({
-                        "epoch": int(epoch),
-                        "price": float(price)
-                    })
-
-                print("Historique:", len(rows))
-                return rows
-
-    finally:
-        ws.close()
-
-
-# ============================================================
-# LIVE DATA
-# ============================================================
-
-def collect_live():
-    print("\nCollecte live:", COLLECT_SECONDS, "secondes")
-
-    ws = connect_deriv()
-
-    rows = []
-    start = time.time()
-
-    try:
-        ws.send(json.dumps({
-            "ticks": SYMBOL,
-            "subscribe": 1,
-            "req_id": 2001
-        }))
-
-        ws.settimeout(10)
-
-        while time.time() - start < COLLECT_SECONDS:
-            try:
-                data = json.loads(ws.recv())
-
-                if "error" in data:
-                    raise RuntimeError(data["error"])
-
-                tick = data.get("tick")
-
-                if tick:
-                    rows.append({
-                        "epoch": int(tick["epoch"]),
-                        "price": float(tick["quote"])
-                    })
-
-            except websocket.WebSocketTimeoutException:
-                continue
-
-    except Exception as error:
-        print("Erreur live:", error)
-
-    finally:
-        ws.close()
-
-    print("Ticks live:", len(rows))
-
-    return rows
-
-
-# ============================================================
-# MERGE TICKS
-# ============================================================
-
-def merge_ticks(db, new_rows):
-    combined = {}
-
-    for row in db["ticks"] + new_rows:
+    for row in rows:
         try:
             epoch = int(row["epoch"])
             price = float(row["price"])
 
-            combined[(epoch, price)] = {
-                "epoch": epoch,
-                "price": price
-            }
+            if epoch > 0 and price > 0 and math.isfinite(price):
+                unique[epoch] = {
+                    "epoch": epoch,
+                    "price": price
+                }
 
-        except (KeyError, ValueError, TypeError):
+        except (KeyError, TypeError, ValueError):
             continue
 
-    db["ticks"] = sorted(
-        combined.values(),
-        key=lambda x: x["epoch"]
-    )[-MAX_TICKS:]
-
-    return db["ticks"]
+    return [unique[k] for k in sorted(unique)]
 
 
-# ============================================================
-# EMA
-# ============================================================
+# ==========================================
+# DERIV HISTORIQUE
+# ==========================================
 
-def calculate_ema(prices, period):
-    result = [None] * len(prices)
+def get_history():
 
-    if len(prices) < period:
-        return result
+    ws = websocket.create_connection(
+        WS_URL,
+        timeout=30
+    )
 
-    multiplier = 2 / (period + 1)
+    try:
 
-    ema = sum(prices[:period]) / period
+        request = {
+            "ticks_history": SYMBOL,
+            "count": HISTORY_COUNT,
+            "end": "latest",
+            "style": "ticks",
+            "req_id": 7001
+        }
 
-    result[period - 1] = ema
+        ws.send(json.dumps(request))
 
-    for i in range(period, len(prices)):
-        ema = (
-            prices[i] * multiplier
-            + ema * (1 - multiplier)
-        )
+        deadline = time.time() + 35
 
-        result[i] = ema
+        while time.time() < deadline:
 
-    return result
+            msg = json.loads(ws.recv())
+
+            if msg.get("error"):
+                raise RuntimeError(
+                    msg["error"].get("message")
+                )
+
+            if msg.get("req_id") == 7001:
+
+                history = msg.get("history", {})
+
+                prices = history.get("prices", [])
+                times = history.get("times", [])
+
+                rows = []
+
+                for t, p in zip(times, prices):
+                    rows.append({
+                        "epoch": t,
+                        "price": p
+                    })
+
+                return clean_ticks(rows)
+
+        raise TimeoutError("Historique non reçu")
+
+    finally:
+        ws.close()
 
 
-# ============================================================
-# RSI - WILDER
-# ============================================================
+# ==========================================
+# DERIV LIVE
+# ==========================================
 
-def calculate_rsi(prices, period):
+def collect_live(seconds):
+
+    if seconds <= 0:
+        return []
+
+    ws = websocket.create_connection(
+        WS_URL,
+        timeout=10
+    )
+
+    ws.settimeout(2)
+
+    rows = []
+
+    try:
+
+        ws.send(json.dumps({
+            "ticks": SYMBOL,
+            "subscribe": 1,
+            "req_id": 7002
+        }))
+
+        deadline = time.time() + seconds
+
+        while time.time() < deadline:
+
+            try:
+                msg = json.loads(ws.recv())
+
+            except websocket.WebSocketTimeoutException:
+                continue
+
+            if msg.get("error"):
+                raise RuntimeError(
+                    msg["error"].get("message")
+                )
+
+            tick = msg.get("tick")
+
+            if tick:
+
+                rows.append({
+                    "epoch": tick.get("epoch", time.time()),
+                    "price": tick["quote"]
+                })
+
+        return clean_ticks(rows)
+
+    finally:
+        ws.close()
+
+
+# ==========================================
+# MATHEMATIQUES
+# ==========================================
+
+def percentile(values, pct):
+
+    values = sorted(values)
+
+    if not values:
+        return None
+
+    pos = (len(values) - 1) * pct / 100
+
+    low = int(pos)
+    high = math.ceil(pos)
+
+    if low == high:
+        return values[low]
+
+    return (
+        values[low]
+        + (values[high] - values[low])
+        * (pos - low)
+    )
+
+
+def rsi_series(prices, period):
+
     result = [None] * len(prices)
 
     if len(prices) <= period:
@@ -314,6 +239,7 @@ def calculate_rsi(prices, period):
     losses = []
 
     for i in range(1, period + 1):
+
         change = prices[i] - prices[i - 1]
 
         gains.append(max(change, 0))
@@ -322,34 +248,36 @@ def calculate_rsi(prices, period):
     avg_gain = sum(gains) / period
     avg_loss = sum(losses) / period
 
-    def rsi_value(gain, loss):
-        if loss == 0:
-            return 100.0 if gain > 0 else 50.0
+    def calculate(g, l):
 
-        rs = gain / loss
+        if l == 0:
+            return 100 if g > 0 else 50
+
+        rs = g / l
 
         return 100 - (100 / (1 + rs))
 
-    result[period] = rsi_value(
+    result[period] = calculate(
         avg_gain,
         avg_loss
     )
 
     for i in range(period + 1, len(prices)):
+
         change = prices[i] - prices[i - 1]
 
         gain = max(change, 0)
         loss = max(-change, 0)
 
         avg_gain = (
-            avg_gain * (period - 1) + gain
+            (period - 1) * avg_gain + gain
         ) / period
 
         avg_loss = (
-            avg_loss * (period - 1) + loss
+            (period - 1) * avg_loss + loss
         ) / period
 
-        result[i] = rsi_value(
+        result[i] = calculate(
             avg_gain,
             avg_loss
         )
@@ -357,601 +285,690 @@ def calculate_rsi(prices, period):
     return result
 
 
-# ============================================================
-# STOCHASTIC
-# ============================================================
+def ema_series(values, period):
 
-def calculate_stochastic(prices, k_period, d_period):
-    k_values = [None] * len(prices)
-    d_values = [None] * len(prices)
-
-    for i in range(k_period - 1, len(prices)):
-        window = prices[i - k_period + 1:i + 1]
-
-        lowest = min(window)
-        highest = max(window)
-
-        if highest == lowest:
-            k_values[i] = 50.0
-        else:
-            k_values[i] = (
-                (prices[i] - lowest)
-                / (highest - lowest)
-            ) * 100
-
-    for i in range(len(prices)):
-        if i < k_period + d_period - 2:
-            continue
-
-        window = k_values[i - d_period + 1:i + 1]
-
-        if all(value is not None for value in window):
-            d_values[i] = sum(window) / d_period
-
-    return k_values, d_values
-
-
-# ============================================================
-# PERCENTILE
-# ============================================================
-
-def percentile(values, percentage):
-    values = sorted(values)
+    result = [None] * len(values)
 
     if not values:
-        return 0
+        return result
 
-    position = (len(values) - 1) * percentage / 100
+    alpha = 2 / (period + 1)
 
-    low = int(position)
-    high = min(low + 1, len(values) - 1)
+    ema = values[0]
 
-    fraction = position - low
+    result[0] = ema
 
-    return (
-        values[low] * (1 - fraction)
-        + values[high] * fraction
-    )
+    for i in range(1, len(values)):
 
+        ema = (
+            alpha * values[i]
+            + (1 - alpha) * ema
+        )
 
-# ============================================================
-# SPIKE DETECTION
-# ============================================================
-
-def calculate_returns(prices):
-    result = [0.0]
-
-    for i in range(1, len(prices)):
-        previous = prices[i - 1]
-
-        if previous <= 0:
-            result.append(0.0)
-        else:
-            result.append(
-                (prices[i] - previous) / previous
-            )
+        result[i] = ema
 
     return result
 
 
-# ============================================================
-# INDICATOR CACHE
-# ============================================================
+def stochastic_series(prices, period, d_period=3):
 
-def build_indicators(prices):
-    print("\nCalcul des indicateurs...")
+    k = [None] * len(prices)
+    d = [None] * len(prices)
 
-    cache = {
-        "rsi": {},
-        "ema": {},
-        "stochastic": {}
-    }
+    for i in range(period - 1, len(prices)):
 
-    rsi_periods = [5, 6, 7, 9, 14, 21]
+        window = prices[
+            i - period + 1:i + 1
+        ]
 
-    ema_periods = [
-        3, 5, 8, 10, 12, 15, 20,
-        25, 30, 40, 50, 60, 80, 100
-    ]
+        low = min(window)
+        high = max(window)
 
-    stochastic_periods = [5, 7, 9, 14]
+        if high == low:
+            k[i] = 50
 
-    for period in rsi_periods:
-        cache["rsi"][period] = calculate_rsi(
-            prices,
-            period
-        )
-
-    for period in ema_periods:
-        cache["ema"][period] = calculate_ema(
-            prices,
-            period
-        )
-
-    for period in stochastic_periods:
-        for d_period in [3, 5]:
-            cache["stochastic"][(period, d_period)] = (
-                calculate_stochastic(
-                    prices,
-                    period,
-                    d_period
-                )
+        else:
+            k[i] = (
+                100 * (prices[i] - low)
+                / (high - low)
             )
 
-    return cache
+    for i in range(d_period - 1, len(prices)):
+
+        window = k[
+            i - d_period + 1:i + 1
+        ]
+
+        if all(x is not None for x in window):
+
+            d[i] = sum(window) / d_period
+
+    return k, d
 
 
-# ============================================================
-# COMBINATION GENERATOR
-# ============================================================
+# ==========================================
+# INDICATEURS
+# ==========================================
 
-def generate_combinations():
-    combinations = []
+def build_indicators(prices):
 
-    rsi_periods = [5, 6, 7, 9, 14, 21]
-    rsi_levels = [20, 25, 30, 35, 40, 45]
+    rsi = {
+        p: rsi_series(prices, p)
+        for p in (6, 9, 14)
+    }
 
-    ema_fast = [3, 5, 8, 10, 12, 15, 20]
-    ema_slow = [20, 25, 30, 40, 50, 60, 80, 100]
+    ema = {
+        p: ema_series(prices, p)
+        for p in (5, 8, 12, 20, 30, 50)
+    }
 
-    stochastic_periods = [5, 7, 9, 14]
-    stochastic_d = [3, 5]
+    stochastic = {
+        p: stochastic_series(prices, p, 3)
+        for p in (5, 9, 14)
+    }
 
-    stochastic_levels = [10, 15, 20, 25, 30]
-
-    for values in itertools.product(
-        rsi_periods,
-        rsi_levels,
-        ema_fast,
-        ema_slow,
-        stochastic_periods,
-        stochastic_d,
-        stochastic_levels
-    ):
-        (
-            rp,
-            rl,
-            ef,
-            es,
-            sk,
-            sd,
-            sl
-        ) = values
-
-        if ef >= es:
-            continue
-
-        combinations.append({
-            "rsi_period": rp,
-            "rsi_level": rl,
-            "ema_fast": ef,
-            "ema_slow": es,
-            "stochastic_k": sk,
-            "stochastic_d": sd,
-            "stochastic_level": sl
-        })
-
-        if len(combinations) >= MAX_COMBINATIONS:
-            break
-
-    return combinations
+    return rsi, ema, stochastic
 
 
-# ============================================================
-# SIGNAL ENGINE
-# ============================================================
+# ==========================================
+# CONFIGURATIONS
+# ==========================================
 
-def check_signal(config, indicators, index):
-    rp = config["rsi_period"]
-    rl = config["rsi_level"]
+def generate_configs():
 
-    ef = config["ema_fast"]
-    es = config["ema_slow"]
+    result = []
 
-    sk = config["stochastic_k"]
-    sd = config["stochastic_d"]
-    sl = config["stochastic_level"]
+    for rp in (6, 9, 14):
 
-    rsi = indicators["rsi"][rp]
+        for rsi_low in (30, 35, 40):
 
-    fast = indicators["ema"][ef]
-    slow = indicators["ema"][es]
+            for rsi_high in (65, 70, 75):
 
-    k, d = indicators["stochastic"][(sk, sd)]
+                for fast, slow in (
+                    (5, 20),
+                    (8, 30),
+                    (12, 50)
+                ):
 
-    if index < 1:
+                    for kp in (5, 9, 14):
+
+                        for stoch_low in (20, 30):
+
+                            result.append((
+                                rp,
+                                rsi_low,
+                                rsi_high,
+                                fast,
+                                slow,
+                                kp,
+                                stoch_low
+                            ))
+
+    return result
+
+
+# ==========================================
+# SIGNAL
+# ==========================================
+
+def is_signal(
+    i,
+    cfg,
+    rsi_map,
+    ema_map,
+    stoch_map
+):
+
+    (
+        rp,
+        low,
+        high,
+        fast,
+        slow,
+        kp,
+        stoch_low
+    ) = cfg
+
+    rsi = rsi_map[rp]
+
+    k, d = stoch_map[kp]
+
+    if i < 1:
         return False
 
-    if any(x[index] is None for x in [
-        rsi, fast, slow, k, d
-    ]):
-        return False
-
-    if any(x[index - 1] is None for x in [
-        rsi, k, d
-    ]):
-        return False
-
-    # RSI remonte depuis sa zone basse.
-
-    rsi_condition = (
-        rsi[index] >= rsi[index - 1]
-        and rsi[index - 1] <= rl
+    values = (
+        rsi[i],
+        rsi[i - 1],
+        k[i],
+        k[i - 1],
+        d[i],
+        d[i - 1]
     )
 
-    # Stochastic croise à la hausse en zone basse.
+    if any(x is None for x in values):
+        return False
 
-    stochastic_condition = (
-        k[index] > d[index]
-        and k[index - 1] <= d[index - 1]
-        and k[index - 1] <= sl
+    # RSI remonte depuis une zone basse.
+
+    rsi_rebound = (
+        rsi[i - 1] <= low
+        and rsi[i] > rsi[i - 1]
     )
 
-    # Tendance EMA haussière.
+    # Évite les RSI déjà trop élevés.
 
-    ema_condition = (
-        fast[index] > slow[index]
+    rsi_not_overheated = rsi[i] < high
+
+    # Croisement haussier du Stochastic.
+
+    stochastic_cross = (
+        k[i - 1] <= d[i - 1]
+        and k[i] > d[i]
+        and k[i - 1] <= stoch_low
+    )
+
+    # Filtre de tendance EMA.
+
+    ema_trend = (
+        ema_map[fast][i]
+        >= ema_map[slow][i]
     )
 
     return (
-        rsi_condition
-        and stochastic_condition
-        and ema_condition
+        rsi_rebound
+        and rsi_not_overheated
+        and stochastic_cross
+        and ema_trend
     )
 
 
-# ============================================================
-# BACKTEST
-# ============================================================
+# ==========================================
+# ÉVALUATION
+# ==========================================
 
-def evaluate_combination(
-    config,
-    indicators,
-    spike_flags,
+def evaluate(
+    cfg,
     start,
-    end
+    end,
+    flags,
+    rsi_map,
+    ema_map,
+    stoch_map
 ):
+
     signals = 0
     hits = 0
 
-    for index in range(start, end - FUTURE_TICKS):
-        if not check_signal(
-            config,
-            indicators,
-            index
-        ):
+    last_signal = -FUTURE_TICKS
+
+    stop = min(
+        end,
+        len(flags) - FUTURE_TICKS
+    )
+
+    for i in range(max(1, start), stop):
+
+        if i - last_signal <= FUTURE_TICKS:
             continue
 
-        signals += 1
+        if is_signal(
+            i,
+            cfg,
+            rsi_map,
+            ema_map,
+            stoch_map
+        ):
 
-        future = spike_flags[
-            index + 1:index + FUTURE_TICKS + 1
-        ]
+            signals += 1
 
-        if any(future):
-            hits += 1
+            if any(
+                flags[i + 1:i + FUTURE_TICKS + 1]
+            ):
+                hits += 1
 
-    probability = (
-        hits / signals
-        if signals else 0
-    )
+            last_signal = i
+
+    rate = hits / signals if signals else 0
 
     return {
         "signals": signals,
         "hits": hits,
-        "probability": probability
+        "hit_rate": rate
     }
 
 
-# ============================================================
-# ANALYSIS ENGINE
-# ============================================================
+# ==========================================
+# ANALYSE PRINCIPALE
+# ==========================================
 
-def analyze_data(db):
-    ticks = db["ticks"]
+def analyze(db):
 
-    print("\n========== ANALYSE V6 ==========")
+    ticks = clean_ticks(db.get("ticks", []))
 
-    if len(ticks) < 1000:
+    prices = [
+        x["price"]
+        for x in ticks
+    ]
+
+    total = len(prices)
+
+    if total < 100:
+
         db["analysis"] = {
+            "version": VERSION,
             "status": "insufficient_data",
-            "total_ticks": len(ticks),
-            "minimum_required": 1000
+            "total_ticks": total,
+            "updated_at": now()
         }
 
         db["prediction"] = {
-            "status": "waiting_for_data"
+            "status": "not_enough_data"
         }
 
-        print("Minimum 1000 ticks requis.")
+        db["spikes"] = []
+
         return
 
-    prices = [float(x["price"]) for x in ticks]
+    changes = [0.0]
 
-    returns = calculate_returns(prices)
+    for i in range(1, total):
 
-    # Split chronologique :
-    # 60 % apprentissage
-    # 20 % validation
-    # 20 % test indépendant
+        changes.append(
+            prices[i] - prices[i - 1]
+        )
 
-    n = len(prices)
+    train_end = int(total * 0.60)
+    validation_end = int(total * 0.80)
 
-    train_end = int(n * 0.60)
-    validation_end = int(n * 0.80)
-
-    positive_returns = [
-        returns[i]
-        for i in range(1, train_end)
-        if returns[i] > 0
+    positive = [
+        x for x in changes[1:train_end]
+        if x > 0
     ]
 
-    if len(positive_returns) < 20:
+    negative = sum(
+        1 for x in changes[1:train_end]
+        if x < 0
+    )
+
+    zero = sum(
+        1 for x in changes[1:train_end]
+        if x == 0
+    )
+
+    # Seuil de spike calculé sur les hausses de l'entraînement.
+
+    if len(positive) >= 5:
+
+        threshold = percentile(
+            positive,
+            95
+        )
+
+        threshold_method = "95th_percentile"
+
+    elif positive:
+
+        threshold = max(positive)
+
+        threshold_method = "provisional_small_sample"
+
+    else:
+
+        threshold = None
+
+        threshold_method = "no_positive_change"
+
+    flags = [False] * total
+    spikes = []
+
+    if threshold is not None:
+
+        for i in range(1, total):
+
+            if (
+                changes[i] > 0
+                and changes[i] >= threshold
+            ):
+
+                flags[i] = True
+
+                spikes.append({
+                    "epoch": ticks[i]["epoch"],
+                    "price": ticks[i]["price"],
+                    "change": round(changes[i], 8)
+                })
+
+    diagnostics = {
+        "total_ticks": total,
+        "train_ticks": train_end,
+        "positive_changes_train": len(positive),
+        "negative_changes_train": negative,
+        "zero_changes_train": zero,
+        "largest_positive_change_train": (
+            round(max(positive), 8)
+            if positive else None
+        ),
+        "spike_threshold_points": (
+            round(threshold, 8)
+            if threshold is not None else None
+        ),
+        "threshold_method": threshold_method,
+        "detected_spikes_total": len(spikes),
+        "future_ticks": FUTURE_TICKS
+    }
+
+    db["spikes"] = spikes[-100:]
+
+    # On ne bloque plus à 20 variations positives.
+    # Il faut toutefois quelques observations pour définir un seuil.
+
+    if threshold is None or len(positive) < 5:
+
         db["analysis"] = {
+            "version": VERSION,
             "status": "insufficient_positive_returns",
-            "total_ticks": n
+            "updated_at": now(),
+            **diagnostics
         }
+
+        db["prediction"] = {
+            "status": "not_enough_positive_training_data"
+        }
+
         return
 
-    spike_threshold = percentile(
-        positive_returns,
-        99.5
-    )
+    rsi_map, ema_map, stoch_map = build_indicators(prices)
 
-    spike_flags = [
-        value >= spike_threshold
-        for value in returns
-    ]
+    all_configs = generate_configs()
 
-    db["spikes"] = [
-        {
-            "epoch": ticks[i]["epoch"],
-            "price": prices[i],
-            "variation": returns[i]
-        }
-        for i in range(1, len(returns))
-        if spike_flags[i]
-    ]
+    training = []
 
-    indicators = build_indicators(prices)
+    for cfg in all_configs:
 
-    combinations = generate_combinations()
-
-    print("Ticks:", n)
-    print("Combinaisons:", len(combinations))
-    print("Seuil spike:", spike_threshold)
-
-    # Recherche sur entraînement.
-
-    training_results = []
-
-    for config in combinations:
-        result = evaluate_combination(
-            config,
-            indicators,
-            spike_flags,
-            100,
-            train_end
-        )
-
-        if result["signals"] < MIN_TRAIN_SIGNALS:
-            continue
-
-        training_results.append({
-            "config": config,
-            **result
-        })
-
-    # Validation : choisir les meilleures configurations.
-
-    training_results.sort(
-        key=lambda x: (
-            x["probability"],
-            x["signals"]
-        ),
-        reverse=True
-    )
-
-    candidates = training_results[:100]
-
-    validation_results = []
-
-    for item in candidates:
-        result = evaluate_combination(
-            item["config"],
-            indicators,
-            spike_flags,
+        result = evaluate(
+            cfg,
+            1,
             train_end,
-            validation_end
+            flags,
+            rsi_map,
+            ema_map,
+            stoch_map
         )
 
-        if result["signals"] < 5:
-            continue
+        if result["signals"] >= 3:
 
-        validation_results.append({
-            "config": item["config"],
-            **result
-        })
+            training.append((
+                result["hit_rate"],
+                result["hits"],
+                result["signals"],
+                cfg
+            ))
 
-    validation_results.sort(
-        key=lambda x: (
-            x["probability"],
-            x["signals"]
-        ),
-        reverse=True
+    training.sort(
+        reverse=True,
+        key=lambda x: (x[0], x[1], x[2])
     )
 
-    # Test final : seules les configurations choisies
-    # sur les données antérieures sont évaluées ici.
+    validation = []
 
-    final_results = []
+    for _, _, _, cfg in training[:100]:
 
-    for item in validation_results[:20]:
-        result = evaluate_combination(
-            item["config"],
-            indicators,
-            spike_flags,
+        result = evaluate(
+            cfg,
+            train_end,
             validation_end,
-            n - FUTURE_TICKS
+            flags,
+            rsi_map,
+            ema_map,
+            stoch_map
         )
 
-        if result["signals"] < MIN_TEST_SIGNALS:
-            continue
+        if result["signals"] >= 2:
 
-        final_results.append({
-            "config": item["config"],
-            **result
-        })
+            validation.append((
+                result["hit_rate"],
+                result["hits"],
+                result["signals"],
+                cfg
+            ))
 
-    final_results.sort(
-        key=lambda x: (
-            x["probability"],
-            x["signals"]
-        ),
-        reverse=True
+    validation.sort(
+        reverse=True,
+        key=lambda x: (x[0], x[1], x[2])
+    )
+
+    tested = []
+
+    for _, _, _, cfg in validation[:30]:
+
+        result = evaluate(
+            cfg,
+            validation_end,
+            total,
+            flags,
+            rsi_map,
+            ema_map,
+            stoch_map
+        )
+
+        if result["signals"] >= 2:
+
+            tested.append((
+                result["hit_rate"],
+                result["hits"],
+                result["signals"],
+                cfg
+            ))
+
+    tested.sort(
+        reverse=True,
+        key=lambda x: (x[0], x[1], x[2])
     )
 
     best = []
 
-    for item in final_results[:10]:
-        c = item["config"]
+    for rate, hits, signals, cfg in tested[:10]:
+
+        (
+            rp,
+            low,
+            high,
+            fast,
+            slow,
+            kp,
+            stoch_low
+        ) = cfg
 
         best.append({
-            "rsi": f"RSI {c['rsi_period']}",
-            "rsi_level": c["rsi_level"],
-            "ema": (
-                f"EMA {c['ema_fast']}/"
-                f"{c['ema_slow']}"
-            ),
-            "stochastic": (
-                f"{c['stochastic_k']}/"
-                f"{c['stochastic_d']}"
-            ),
-            "stochastic_level": c["stochastic_level"],
-            "signals_tested": item["signals"],
-            "spikes_detected": item["hits"],
-            "spike_probability": round(
-                item["probability"],
-                4
-            )
+
+            "rsi_period": rp,
+            "rsi_low": low,
+            "rsi_high_filter": high,
+
+            "ema_fast": fast,
+            "ema_slow": slow,
+
+            "stochastic_k": kp,
+            "stochastic_level": stoch_low,
+
+            "test_signals": signals,
+            "test_hits": hits,
+            "test_hit_rate": round(rate, 4)
+
         })
 
+    test_start = validation_end
+    test_end = max(
+        validation_end,
+        total - FUTURE_TICKS
+    )
+
+    opportunities = max(
+        0,
+        test_end - test_start
+    )
+
+    baseline_hits = sum(
+        1
+        for i in range(test_start, test_end)
+        if any(
+            flags[i + 1:i + FUTURE_TICKS + 1]
+        )
+    )
+
+    baseline = (
+        baseline_hits / opportunities
+        if opportunities else 0
+    )
+
+    status = (
+        "ok"
+        if best
+        else "no_reliable_configuration"
+    )
+
     db["analysis"] = {
-        "status": "completed",
+
         "version": VERSION,
-        "total_ticks": n,
-        "combinations_tested": len(combinations),
-        "combinations_qualified": len(training_results),
-        "spike_threshold": spike_threshold,
-        "total_spikes": len(db["spikes"]),
-        "training_ticks": train_end,
-        "validation_ticks": validation_end - train_end,
-        "test_ticks": n - validation_end,
+        "status": status,
+        "updated_at": now(),
+
+        **diagnostics,
+
+        "configurations_tested": len(all_configs),
+
+        "training_configurations_with_signals": len(training),
+
+        "validation_configurations_with_signals": len(validation),
+
+        "test_configurations_with_signals": len(tested),
+
+        "baseline_test_hit_rate": round(baseline, 4),
+
         "best_configurations": best,
-        "target_probability": TARGET_PRECISION,
-        "note": (
-            "Probabilités historiques expérimentales. "
-            "Aucune garantie de spike futur."
+
+        "warning": (
+            "Un petit nombre de signaux ne permet pas "
+            "de conclure à une performance fiable."
         )
     }
 
     if best:
-        best_config = best[0]
 
         db["prediction"] = {
-            "updated_at": now_iso(),
-            "signal": (
-                "CONFIGURATION HISTORIQUEMENT FAVORABLE"
-                if best_config["spike_probability"] >= TARGET_PRECISION
-                else "AUCUNE CONFIGURATION A 80%"
+
+            "status": "experimental",
+            "symbol": SYMBOL,
+            "updated_at": now(),
+
+            "best_configuration": best[0],
+
+            "baseline_test_hit_rate": round(
+                baseline,
+                4
             ),
-            "best_configuration": best_config
-        }
 
-    else:
-        db["prediction"] = {
-            "updated_at": now_iso(),
-            "signal": "DONNEES INSUFFISANTES POUR VALIDER",
-            "best_configuration": None
-        }
-
-    print("\n========== RESULTATS ==========")
-    print("Combinaisons testées:", len(combinations))
-    print("Combinaisons qualifiées:", len(training_results))
-    print("Spikes:", len(db["spikes"]))
-
-    if best:
-        for i, item in enumerate(best[:5], 1):
-            print(
-                i,
-                item["rsi"],
-                "EMA:", item["ema"],
-                "STO:", item["stochastic"],
-                "Probabilité:",
-                item["spike_probability"] * 100,
-                "%",
-                "Signaux:",
-                item["signals_tested"]
+            "note": (
+                "Résultat statistique expérimental. "
+                "Aucun trade n'est exécuté."
             )
+        }
+
     else:
-        print("Aucune configuration validée.")
 
-    print("================================")
+        db["prediction"] = {
+            "status": "no_validated_signal"
+        }
 
 
-# ============================================================
-# MAIN
-# ============================================================
+# ==========================================
+# EXÉCUTION
+# ==========================================
 
 def main():
-    print("\n===================================")
-    print("       SPIKE1000 ENGINE V6")
-    print("       MULTI INDICATOR")
-    print("===================================")
 
     db = load_db()
 
-    print("Ticks existants:", len(db["ticks"]))
+    errors = []
 
     try:
-        history = collect_history()
-        merge_ticks(db, history)
-        save_db(db)
 
-    except Exception as error:
-        print("Erreur historique:", error)
-        record_error(db, error)
+        print("Téléchargement historique", SYMBOL)
+
+        history = get_history()
+
+        print("Ticks historiques :", len(history))
+
+        db["ticks"] = clean_ticks(
+            db.get("ticks", []) + history
+        )
+
+    except Exception as e:
+
+        errors.append("historique: " + str(e))
+
+        print("Erreur historique :", e)
 
     try:
-        live = collect_live()
-        merge_ticks(db, live)
-        save_db(db)
 
-    except Exception as error:
-        print("Erreur live:", error)
-        record_error(db, error)
+        print(
+            "Collecte live pendant",
+            COLLECT_SECONDS,
+            "secondes"
+        )
 
-    try:
-        analyze_data(db)
+        live = collect_live(COLLECT_SECONDS)
 
-    except Exception as error:
-        print("Erreur analyse:", error)
-        record_error(db, error)
+        print("Ticks live :", len(live))
 
-        db["analysis"] = {
-            "status": "error",
-            "message": str(error)
-        }
+        db["ticks"] = clean_ticks(
+            db.get("ticks", []) + live
+        )
 
-        db["prediction"] = {
-            "signal": "ANALYSE IMPOSSIBLE"
-        }
+    except Exception as e:
+
+        errors.append("live: " + str(e))
+
+        print("Erreur live :", e)
+
+    db["ticks"] = clean_ticks(
+        db.get("ticks", [])
+    )[-MAX_STORED_TICKS:]
+
+    db["errors"] = errors[-20:]
+
+    print("Total ticks :", len(db["ticks"]))
+
+    analyze(db)
+
+    analysis = db.get("analysis", {})
+
+    print("\n=== DIAGNOSTIC SPIKE1000 V7 ===")
+
+    for key in (
+        "status",
+        "total_ticks",
+        "train_ticks",
+        "positive_changes_train",
+        "negative_changes_train",
+        "zero_changes_train",
+        "largest_positive_change_train",
+        "spike_threshold_points",
+        "detected_spikes_total",
+        "configurations_tested"
+    ):
+
+        if key in analysis:
+            print(key, ":", analysis[key])
+
+    print("================================\n")
 
     save_db(db)
 
-    print("\nSPIKE1000 V6 terminé.")
-    print("Lecture seule.")
-    print("Aucun trade exécuté.")
+    print("db.json sauvegardé.")
+
+    if errors:
+        print("Erreurs :", errors)
 
 
 if __name__ == "__main__":
